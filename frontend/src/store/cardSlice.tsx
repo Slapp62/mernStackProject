@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchCardsThunk = createAsyncThunk('card/fetchCards', async () => {
-    const response = await axios.get("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards");
+    const response = await axios.get("http://localhost:5000/api/cards/");
     return response.data
 })
 

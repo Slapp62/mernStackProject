@@ -3,7 +3,10 @@ const cors = require('cors');
 const chalk = require('chalk');
 const { handleError } = require('./utils/errorHandler');
 const { connectToDB } = require('./database/dbService');
+const dotenv = require('dotenv');
+const router = require('./controllers/main');
 
+dotenv.config();
 const app = express();
 
 // global middleware
@@ -15,7 +18,7 @@ app.use(
 );
 
 app.use(express.json());
-//app.use(router);
+app.use(router);
 
 // error handler
 app.use((error, req, res, next) => {
@@ -24,7 +27,7 @@ app.use((error, req, res, next) => {
 
 // listen
 const PORT = 5000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(chalk.green.bold(`server running on port ${PORT}`));
-  connectToDB();
+  await connectToDB();
 });

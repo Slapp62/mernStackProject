@@ -1,0 +1,104 @@
+const { Schema, model } = require("mongoose");
+
+const cardSchema = new Schema({
+  title: {
+    type: String,
+    required: true,
+    minLength: 2,
+    maxLength: 256,
+  },
+  subtitle: {
+    type: String,
+    required: true,
+    minLength: 2,
+    maxLength: 256,
+  },
+  description: {
+    type: String,
+    required: true,
+    minLength: 2,
+    maxLength: 1024,
+  },
+  phone: {
+    type: String,
+    required: true,
+    match: [/^(\+972|972|0)(2|3|4|8|9|5\d)\d{7}$/, "Phone must be a valid Israeli phone number"],
+  },
+  email: {
+    type: String,
+    required: true,
+    match: [/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/, "Please enter a valid email"],
+  },
+  web: {
+    type: String,
+    default: "",
+  },
+  image: {
+    url: {
+      type: String,
+      default: "",
+    },
+    alt: {
+      type: String,
+      default: "",
+      maxLength: 256,
+    },
+    _id: {
+      type: Schema.Types.ObjectId,
+      auto: true,
+    },
+  },
+  address: {
+    state: {
+      type: String,
+      default: "",
+      maxLength: 256,
+    },
+    country: {
+      type: String,
+      required: true,
+      minLength: 2,
+      maxLength: 256,
+    },
+    city: {
+      type: String,
+      required: true,
+      minLength: 2,
+      maxLength: 256,
+    },
+    street: {
+      type: String,
+      required: true,
+      minLength: 2,
+      maxLength: 256,
+    },
+    houseNumber: {
+      type: Schema.Types.Mixed,
+      required: true,
+    },
+    zip: {
+      type: Schema.Types.Mixed,
+      required: true,
+    },
+    _id: {
+      type: Schema.Types.ObjectId,
+      auto: true,
+    },
+  },
+  bizNumber: {
+    type: Number,
+  },
+  likes: [{
+    type: String,
+  }],
+  user_id: {
+    type: String,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const Card = model("Card", cardSchema);
+module.exports = Card;
