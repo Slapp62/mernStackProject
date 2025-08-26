@@ -3,5 +3,5 @@ const Users = require("./usersSchema.js");
 
 module.exports = {
   Cards,
-  Users,
+  Users
 };

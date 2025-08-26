@@ -40,10 +40,6 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
-    match: [
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-]).{8,20}$/,
-      "Password must be between 8 and 20 characters and contain at least 1 uppercase, 1 number, and 1 special character"
-    ],
   },
   image: {
     url: {
@@ -111,5 +107,5 @@ const userSchema = new Schema({
   },
 });
 
-const User = model("User", userSchema);
-module.exports = User;
+const Users = model("Users", userSchema);
+module.exports = Users;

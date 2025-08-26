@@ -92,7 +92,9 @@ const cardSchema = new Schema({
     type: String,
   }],
   user_id: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
   createdAt: {
     type: Date,
@@ -100,5 +102,5 @@ const cardSchema = new Schema({
   },
 });
 
-const Card = model("Card", cardSchema);
-module.exports = Card;
+const Cards = model("Cards", cardSchema);
+module.exports = Cards;
