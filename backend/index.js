@@ -26,16 +26,20 @@ const accessLogStream = fs.createWriteStream(
 );
 
 app.use(morgan('combined', { stream: accessLogStream }));
+
 app.use(express.json());
+
+app.use(express.static('public'));
+
 app.use(router);
 
 // error handler
-app.use((error, req, res, next) => {
+app.use((error, _req, res, next) => {
   handleError(res, error.status || 500, error.message);
 });
 
 // listen
-const PORT = 5000;
+const PORT = 8181;
 app.listen(PORT, async () => {
   console.log(chalk.green.bold(`server running on port ${PORT}`));
   await connectToDB();

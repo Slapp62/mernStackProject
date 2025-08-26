@@ -1,7 +1,9 @@
 const express = require("express");
-const { getAllUsers, createUser, verifyUserCredentials, getUserById, toggleRole, updateProfile, deleteUser } = require("../services/userService.js");
+const { getAllUsers, registerUser, verifyUserCredentials, getUserById, toggleRole, updateProfile, deleteUser } = require("../services/userService.js");
 const { handleError } = require("../utils/errorHandler.js");
 const { handleSuccess } = require("../utils/handleSuccess.js");
+const userValidation = require("../middleware/userValidation.js");
+const { id } = require("../validation/joiSchemas/joiUserSchema.js");
 
 const userRouter = express.Router();
 
@@ -24,11 +26,16 @@ userRouter.get("/:id", async (req, res) => {
   }
 });
 
-userRouter.post("/register", async (req, res) => {
+userRouter.post("/register", userValidation, async (req, res) => {
   try {
     const userData = req.body;
-    const user = await createUser(userData);
-    res.status(201).json(user);
+    const user = await registerUser(userData);
+    const responseMessage = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+    }
+    handleSuccess(res, 200, responseMessage);
   } catch (error) {
     handleError(res, 500, error.message);
   }

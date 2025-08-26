@@ -1,16 +1,14 @@
 const { verifyPassword, encryptPassword } = require('../utils/bcrypt');
-const Cards = require('../validation/mongoSchemas/cardsSchema');
 const Users = require('../validation/mongoSchemas/usersSchema');
 
 const getAllUsers = async () => {
   return await Users.find({});
 }  
 
-const createUser = async (userData) => {
+const registerUser = async (userData) => {
   try {
     const encryptedPassword = await encryptPassword(userData.password);
     userData.password = encryptedPassword;
-
     const newUser = new Users(userData);
     return await newUser.save();
   } catch (error) {
@@ -56,7 +54,7 @@ const deleteUser = async (userId) => {
 
 module.exports = { 
   getAllUsers, 
-  createUser, 
+  registerUser, 
   getUserById, 
   verifyUserCredentials, 
   toggleRole,
