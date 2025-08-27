@@ -1,8 +1,15 @@
 const { verifyPassword, encryptPassword } = require('../utils/bcrypt');
 const Users = require('../validation/mongoSchemas/usersSchema');
+const { generateToken } = require('../utils/jwtService');
 
 const getAllUsers = async () => {
-  return await Users.find({});
+  const users = await Users.find().select('-password').lean();
+  if (!users || users.length === 0) {
+    const error = new Error('No users found');
+    error.status = 404;
+    throw error;
+  }
+  return users;
 }  
 
 const registerUser = async (userData) => {
@@ -17,21 +24,37 @@ const registerUser = async (userData) => {
 }
 
 const getUserById = async (userId) => {
-  return await Users.findById(userId);
+  const user = await Users.findById(userId).select('-password -isAdmin -__v').lean();
+  if (!user) {
+    const error = new Error('User not found');
+    error.status = 404;
+    throw error;
+  }
+  return user;
 }
 
 const verifyUserCredentials = async (email, enteredPassword) => {
   const user = await Users.findOne({ email });
-  const savedPassword = user.password;
-
   if (!user) {
-    throw new Error('Invalid email');
+    const error = new Error('User not found');
+      error.status = 400;
+      throw error;
   }
-  
+  const savedPassword = user.password;
   const isPasswordValid = await verifyPassword(enteredPassword, savedPassword);
   if (!isPasswordValid) {
-    throw new Error('Invalid password');
+    const error = new Error('Invalid password');
+    error.status = 400;
+    throw error;
   }
+
+  const token = generateToken({ 
+    id: user._id, 
+    isAdmin: user.isAdmin,
+    isBusiness: user.isBusiness
+  });
+
+  return token;
 }
 
 const updateProfile = async (userId, updateData) => {

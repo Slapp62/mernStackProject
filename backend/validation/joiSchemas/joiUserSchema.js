@@ -10,8 +10,13 @@ const joiUserSchema = joi.object({
   phone: joi.string().pattern(/^(\+972|972|0)(2|3|4|8|9|5\d)\d{7}$/).required(),
   
   email: joi.string().email().required(),
-  password: joi.string().required(),
-
+  password: joi.string()
+  .required()
+  .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)
+  .messages({
+    'string.pattern.base': 'Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+  }),
+  
   image: joi.object({
     url: joi.string().uri().optional().allow(''),
     alt: joi.string().max(256).optional().allow('')
