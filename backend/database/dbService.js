@@ -1,7 +1,6 @@
 const { connectLocalDB } = require("./mongoDB/connectLocally");
 const { connectAtlasDB } = require("./mongoDB/connectAtlas"); // future use
 
-
 const ENV = "dev";
 
 const connectToDB = async () => {

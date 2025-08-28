@@ -10,7 +10,6 @@ const userSchema = new Schema({
     },
     middle: {
       type: String,
-      minLength: 2,
       maxLength: 256,
       default: "",
     },
@@ -28,7 +27,10 @@ const userSchema = new Schema({
   phone: {
     type: String,
     required: true,
-    match: [/^(\+972|972|0)(2|3|4|8|9|5\d)\d{7}$/, "Phone must be a valid Israeli phone number"],
+    match: [
+      /^(\+972[-\s]?|972[-\s]?|0)((2|3|4|8|9)[-\s]?\d{7}|5[0-9][-\s]?\d{7})$/,
+      "Phone must be a valid Israeli phone number",
+    ],
   },
   email: {
     type: String,

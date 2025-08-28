@@ -1,14 +1,29 @@
 const express = require("express");
-const { getAllUsers, registerUser, verifyUserCredentials, getUserById, toggleRole, updateProfile, deleteUser } = require("../services/userService.js");
+const {
+  getAllUsers,
+  registerUser,
+  verifyUserCredentials,
+  getUserById,
+  toggleRole,
+  updateProfile,
+  deleteUser,
+} = require("../services/userService.js");
 const { handleError } = require("../utils/errorHandler.js");
 const { handleSuccess } = require("../utils/handleSuccess.js");
-const { profileValidation, loginValidation } = require("../middleware/userValidation.js");
-const { verifyToken, adminAuth, userAdminAuth } = require("../middleware/tokenAuth.js");
+const {
+  profileValidation,
+  loginValidation,
+} = require("../middleware/userValidation.js");
+const {
+  authenticateUser,
+  adminAuth,
+  userAdminAuth,
+} = require("../middleware/authService.js");
 
 const userRouter = express.Router();
 
 // Get all users - Admin only
-userRouter.get("/", verifyToken, adminAuth, async (_req, res) => {
+userRouter.get("/", authenticateUser, adminAuth, async (_req, res) => {
   try {
     const users = await getAllUsers();
     handleSuccess(res, 200, users);
@@ -18,11 +33,11 @@ userRouter.get("/", verifyToken, adminAuth, async (_req, res) => {
 });
 
 // Get user by ID
-userRouter.get("/:id", verifyToken, userAdminAuth, async (req, res) => {
+userRouter.get("/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await getUserById(userId);
-    handleSuccess(res, 200, user);
+    handleSuccess(res, 200, JSON.stringify(user, null, 2));
   } catch (error) {
     handleError(res, 500, error.message);
   }
@@ -37,7 +52,7 @@ userRouter.post("/register", profileValidation, async (req, res) => {
       id: user._id,
       name: user.name,
       email: user.email,
-    }
+    };
     handleSuccess(res, 200, responseMessage);
   } catch (error) {
     handleError(res, 500, error.message);
@@ -47,8 +62,13 @@ userRouter.post("/register", profileValidation, async (req, res) => {
 userRouter.post("/login", loginValidation, async (req, res) => {
   try {
     const { email, password } = req.body;
-    await verifyUserCredentials(email, password);
-    handleSuccess(res, 200, "Login successful");
+    const token = await verifyUserCredentials(email, password);
+
+    handleSuccess(
+      res,
+      200,
+      JSON.stringify({ message: "Login successful", token: token }, null, 2),
+    );
   } catch (error) {
     const status = error.status || 500;
     handleError(res, status, error.message);

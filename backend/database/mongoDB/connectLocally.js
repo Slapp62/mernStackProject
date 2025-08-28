@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const chalk = require("chalk");
 
-
 const connectLocalDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_LOCAL_URI);

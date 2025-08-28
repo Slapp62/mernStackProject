@@ -3,11 +3,11 @@ import { joiValidator } from "../joiValidator.js";
 
 const resolver = "joi";
 
-export const validator = function(schema) {
-  return function(req, res, next) {
+export const validator = function (schema) {
+  return function (req, res, next) {
     if (resolver === "joi") {
       req.validation = joiValidator(schema, req.body);
-      
+
       if (req.validation.success === true) {
         next();
       } else {
@@ -15,6 +15,5 @@ export const validator = function(schema) {
         handleError(res, 400, joiErrorMessage);
       }
     }
-  }
+  };
 };
-

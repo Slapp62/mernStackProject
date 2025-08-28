@@ -1,13 +1,19 @@
-const express = require('express');
-const { getAllCards, getCardById, getUserCards, getLikedCards, addLikeToCard } = require('../services/cardsServices.js');
-const { createCard } = require('../services/cardsServices.js');
-const { handleSuccess } = require('../utils/handleSuccess.js');
-const { handleError } = require('../utils/errorHandler.js');
+const express = require("express");
+const {
+  getAllCards,
+  getCardById,
+  getUserCards,
+  getLikedCards,
+  addLikeToCard,
+} = require("../services/cardsServices.js");
+const { createCard } = require("../services/cardsServices.js");
+const { handleSuccess } = require("../utils/handleSuccess.js");
+const { handleError } = require("../utils/errorHandler.js");
 
 const cardRouter = express.Router();
 
 // get all cards
-cardRouter.get('/', async (_req, res) => {
+cardRouter.get("/", async (_req, res) => {
   try {
     const cards = await getAllCards();
     handleSuccess(res, 200, cards);
@@ -17,7 +23,7 @@ cardRouter.get('/', async (_req, res) => {
 });
 
 // create a new card
-cardRouter.post('/create/:id', async (req, res) => {
+cardRouter.post("/create/:id", async (req, res) => {
   try {
     const userId = req.params.id;
     const cardData = req.body;
@@ -29,7 +35,7 @@ cardRouter.post('/create/:id', async (req, res) => {
 });
 
 // get card by id
-cardRouter.get('/:id', async (req, res) => {
+cardRouter.get("/:id", async (req, res) => {
   try {
     const cardId = req.params.id;
     const card = await getCardById(cardId);
@@ -40,7 +46,7 @@ cardRouter.get('/:id', async (req, res) => {
 });
 
 // get cards by user id
-cardRouter.get('/user/:userId', async (req, res) => {
+cardRouter.get("/user/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const userCards = await getUserCards(userId);
@@ -51,7 +57,7 @@ cardRouter.get('/user/:userId', async (req, res) => {
 });
 
 // get liked cards by user id
-cardRouter.get('/liked/:userId', async (req, res) => {
+cardRouter.get("/liked/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const likedCards = await getLikedCards(userId);
@@ -62,7 +68,7 @@ cardRouter.get('/liked/:userId', async (req, res) => {
 });
 
 // add like to card
-cardRouter.post('/like/:cardId/:userId', async (req, res) => {
+cardRouter.post("/like/:cardId/:userId", async (req, res) => {
   try {
     const cardId = req.params.cardId;
     const userId = req.params.userId;
@@ -74,7 +80,7 @@ cardRouter.post('/like/:cardId/:userId', async (req, res) => {
 });
 
 // edit card by id
-cardRouter.put('/edit/:id', async (req, res) => {
+cardRouter.put("/edit/:id", async (req, res) => {
   try {
     const cardId = req.params.id;
     const cardData = req.body;
@@ -86,12 +92,12 @@ cardRouter.put('/edit/:id', async (req, res) => {
 });
 
 // delete card by id
-cardRouter.delete('/:cardId/:userId', async (req, res) => {
+cardRouter.delete("/:cardId/:userId", async (req, res) => {
   try {
     const cardId = req.params.id;
     const userId = req.params.userId;
     await deleteCard(cardId, userId);
-    handleSuccess(res, 200, 'Card deleted successfully');
+    handleSuccess(res, 200, "Card deleted successfully");
   } catch (error) {
     handleError(res, 500, error.message);
   }
