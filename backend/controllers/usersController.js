@@ -38,7 +38,7 @@ userRouter.get("/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await getUserById(userId);
-    handleSuccess(res, 200, JSON.stringify(user, null, 2));
+    handleSuccess(res, 200, user);
   } catch (error) {
     handleError(res, 500, error.message);
   }
@@ -69,7 +69,7 @@ userRouter.post("/login", loginValidation, async (req, res) => {
     handleSuccess(
       res,
       200,
-      JSON.stringify({ message: "Login successful", token: token }, null, 2),
+      { message: "Login successful", token: token },
     );
   } catch (error) {
     const status = error.status || 500;
