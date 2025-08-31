@@ -44,16 +44,11 @@ const getUserById = async (userId) => {
 
 const verifyUserCredentials = async (email, enteredPassword) => {
   const user = await Users.findOne({ email });
-  if (!user) {
-    const error = new Error("User not found");
-    error.status = 400;
-    throw error;
-  }
-
   const savedPassword = user.password;
   const isPasswordValid = await verifyPassword(enteredPassword, savedPassword);
-  if (!isPasswordValid) {
-    const error = new Error("Invalid password");
+
+  if (!user || !isPasswordValid) {
+    const error = new Error("Invalid email or password");
     error.status = 400;
     throw error;
   }

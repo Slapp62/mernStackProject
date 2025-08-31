@@ -1,5 +1,5 @@
 const { connectLocalDB } = require("./mongoDB/connectLocally");
-const { connectAtlasDB } = require("./mongoDB/connectAtlas"); 
+const { connectAtlasDB } = require("./mongoDB/connectAtlas");
 const config = require("config");
 
 const ENV = config.get("NODE_ENV");

@@ -66,11 +66,7 @@ userRouter.post("/login", loginValidation, async (req, res) => {
     const { email, password } = req.body;
     const token = await verifyUserCredentials(email, password);
 
-    handleSuccess(
-      res,
-      200,
-      { message: "Login successful", token: token },
-    );
+    handleSuccess(res, 200, { message: "Login successful", token: token });
   } catch (error) {
     const status = error.status || 500;
     handleError(res, status, error.message);
@@ -90,24 +86,34 @@ userRouter.put("/users/:id", authenticateUser, async (req, res) => {
 });
 
 // Toggle user role - Admin only
-userRouter.patch("/users/:id", authenticateUser, userAdminAuth, async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const updatedUser = await toggleRole(userId);
-    handleSuccess(res, 200, updatedUser);
-  } catch (error) {
-    handleError(res, 500, error.message);
-  }
-});
+userRouter.patch(
+  "/users/:id",
+  authenticateUser,
+  userAdminAuth,
+  async (req, res) => {
+    try {
+      const userId = req.user._id;
+      const updatedUser = await toggleRole(userId);
+      handleSuccess(res, 200, updatedUser);
+    } catch (error) {
+      handleError(res, 500, error.message);
+    }
+  },
+);
 
-userRouter.delete("/users/:id", authenticateUser, userAdminAuth, async (req, res) => {
-  try {
-    const userId = req.user._id;
-    await deleteUser(userId);
-    handleSuccess(res, 200, "User deleted successfully");
-  } catch (error) {
-    handleError(res, 500, error.message);
-  }
-});
+userRouter.delete(
+  "/users/:id",
+  authenticateUser,
+  userAdminAuth,
+  async (req, res) => {
+    try {
+      const userId = req.user._id;
+      await deleteUser(userId);
+      handleSuccess(res, 200, "User deleted successfully");
+    } catch (error) {
+      handleError(res, 500, error.message);
+    }
+  },
+);
 
 module.exports = userRouter;
