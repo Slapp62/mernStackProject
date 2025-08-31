@@ -78,7 +78,7 @@ userRouter.post("/login", loginValidation, async (req, res) => {
 });
 
 // Update user profile
-userRouter.put("/update-profile/:id", authenticateUser, async (req, res) => {
+userRouter.put("/users/:id", authenticateUser, async (req, res) => {
   try {
     const userId = req.user._id;
     const updateData = req.body;
@@ -88,8 +88,9 @@ userRouter.put("/update-profile/:id", authenticateUser, async (req, res) => {
     handleError(res, 500, error.message);
   }
 });
+
 // Toggle user role - Admin only
-userRouter.patch("/toggle-role", authenticateUser, userAdminAuth, async (req, res) => {
+userRouter.patch("/users/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
     const userId = req.user._id;
     const updatedUser = await toggleRole(userId);
@@ -99,7 +100,7 @@ userRouter.patch("/toggle-role", authenticateUser, userAdminAuth, async (req, re
   }
 });
 
-userRouter.delete("/delete-user", authenticateUser, userAdminAuth, async (req, res) => {
+userRouter.delete("/users/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
     const userId = req.user._id;
     await deleteUser(userId);

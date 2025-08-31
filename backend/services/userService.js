@@ -14,6 +14,13 @@ const getAllUsers = async () => {
 
 const registerUser = async (userData) => {
   try {
+    const existingUser = await Users.findOne({ email: userData.email });
+    if (existingUser) {
+      const error = new Error("User already exists");
+      error.status = 400;
+      throw error;
+    }
+
     const encryptedPassword = await encryptPassword(userData.password);
     userData.password = encryptedPassword;
     const newUser = new Users(userData);
