@@ -19,7 +19,6 @@ const {
   adminAuth,
   userAdminAuth,
 } = require("../middleware/authService.js");
-const { u } = require("framer-motion/client");
 
 const userRouter = express.Router();
 
@@ -74,7 +73,7 @@ userRouter.post("/login", loginValidation, async (req, res) => {
 });
 
 // Update user profile
-userRouter.put("/users/:id", authenticateUser, async (req, res) => {
+userRouter.put("/:id", authenticateUser, async (req, res) => {
   try {
     const userId = req.user._id;
     const updateData = req.body;
@@ -87,7 +86,7 @@ userRouter.put("/users/:id", authenticateUser, async (req, res) => {
 
 // Toggle user role - Admin only
 userRouter.patch(
-  "/users/:id",
+  "/:id",
   authenticateUser,
   userAdminAuth,
   async (req, res) => {
@@ -102,7 +101,7 @@ userRouter.patch(
 );
 
 userRouter.delete(
-  "/users/:id",
+  "/:id",
   authenticateUser,
   userAdminAuth,
   async (req, res) => {

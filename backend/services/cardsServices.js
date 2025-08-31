@@ -1,3 +1,4 @@
+const { th } = require("framer-motion/client");
 const Cards = require("../validation/mongoSchemas/cardsSchema");
 const Users = require("../validation/mongoSchemas/usersSchema");
 
@@ -17,7 +18,9 @@ const createCard = async (cardData, userId) => {
 const getCardById = async (id) => {
   const card = await Cards.findById(id);
   if (!card) {
-    throw new Error("Card not found");
+    const error = new Error("Card not found");
+    error.status = 404;
+    throw error;
   }
   return card;
 };

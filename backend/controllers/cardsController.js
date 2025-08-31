@@ -9,6 +9,7 @@ const {
 const { createCard } = require("../services/cardsServices.js");
 const { handleSuccess } = require("../utils/handleSuccess.js");
 const { handleError } = require("../utils/errorHandler.js");
+const { authenticateUser } = require("../middleware/authService.js");
 
 const cardRouter = express.Router();
 
@@ -23,7 +24,7 @@ cardRouter.get("/", async (_req, res) => {
 });
 
 // create a new card
-cardRouter.post("/create/:id", async (req, res) => {
+cardRouter.post("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
     const cardData = req.body;
@@ -46,9 +47,9 @@ cardRouter.get("/:id", async (req, res) => {
 });
 
 // get cards by user id
-cardRouter.get("/user/:userId", async (req, res) => {
+cardRouter.get("/user", authenticateUser, async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const userId = req.user._id;
     const userCards = await getUserCards(userId);
     handleSuccess(res, 200, userCards);
   } catch (error) {
