@@ -19,6 +19,7 @@ const {
   adminAuth,
   userAdminAuth,
 } = require("../middleware/authService.js");
+const { u } = require("framer-motion/client");
 
 const userRouter = express.Router();
 
@@ -59,6 +60,7 @@ userRouter.post("/register", profileValidation, async (req, res) => {
   }
 });
 
+// User login
 userRouter.post("/login", loginValidation, async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -75,9 +77,10 @@ userRouter.post("/login", loginValidation, async (req, res) => {
   }
 });
 
-userRouter.put("/update-profile/:id", async (req, res) => {
+// Update user profile
+userRouter.put("/update-profile/:id", authenticateUser, async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.user._id;
     const updateData = req.body;
     const updatedUser = await updateProfile(userId, updateData);
     handleSuccess(res, 200, updatedUser);
@@ -85,10 +88,10 @@ userRouter.put("/update-profile/:id", async (req, res) => {
     handleError(res, 500, error.message);
   }
 });
-
-userRouter.patch("/toggle-role/:id", async (req, res) => {
+// Toggle user role - Admin only
+userRouter.patch("/toggle-role", authenticateUser, userAdminAuth, async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.user._id;
     const updatedUser = await toggleRole(userId);
     handleSuccess(res, 200, updatedUser);
   } catch (error) {
@@ -96,10 +99,10 @@ userRouter.patch("/toggle-role/:id", async (req, res) => {
   }
 });
 
-userRouter.delete("/:id", async (req, res) => {
+userRouter.delete("/delete-user", authenticateUser, userAdminAuth, async (req, res) => {
   try {
-    const userId = req.params.id;
-    deleteUser(userId);
+    const userId = req.user._id;
+    await deleteUser(userId);
     handleSuccess(res, 200, "User deleted successfully");
   } catch (error) {
     handleError(res, 500, error.message);
