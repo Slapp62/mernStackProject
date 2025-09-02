@@ -9,7 +9,7 @@ const dummyCards = [
     email: "info@cohensbakery.com",
     web: "https://www.cohensbakery.co.il",
     image: {
-      url: "https://cdn.pixabay.com/photo/2014/12/21/23/28/cake-575781_960_720.jpg",
+      url: "https://plus.unsplash.com/premium_photo-1661772661721-b16346fe5b0f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YnVzaW5lc3N8ZW58MHx8MHx8fDA%3D",
       alt: "Fresh baked goods display",
     },
     address: {
@@ -33,7 +33,7 @@ const dummyCards = [
     email: "sarah@sarahartstudio.com",
     web: "https://www.sarahartstudio.com",
     image: {
-      url: "https://cdn.pixabay.com/photo/2017/05/25/21/51/artist-2343417_960_720.jpg",
+      url: "https://images.unsplash.com/photo-1556740772-1a741367b93e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxzZWFyY2h8MXx8YnVzaW5lc3N8ZW58MHx8MHx8fDA%3D",
       alt: "Art studio with paintings and brushes",
     },
     address: {
@@ -58,7 +58,7 @@ const dummyCards = [
     email: "contact@levitechsolutions.com",
     web: "https://www.levitechsolutions.co.il",
     image: {
-      url: "https://cdn.pixabay.com/photo/2015/01/08/18/27/startup-593341_960_720.jpg",
+      url: "https://images.unsplash.com/39/lIZrwvbeRuuzqOoWJUEn_Photoaday_CSD%20%281%20of%201%29-5.jpg?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YnVzaW5lc3N8ZW58MHx8MHx8fDA%3D",
       alt: "Modern office with computers and technology",
     },
     address: {
@@ -81,7 +81,7 @@ const dummyCards = [
     email: "tours@jerusalemwithdavid.com",
     web: "https://www.jerusalemwithdavid.com",
     image: {
-      url: "https://cdn.pixabay.com/photo/2018/07/29/04/50/old-city-3568451_960_720.jpg",
+      url: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YnVzaW5lc3N8ZW58MHx8MHx8fDA%3D",
       alt: "Jerusalem Old City walls and architecture",
     },
     address: {

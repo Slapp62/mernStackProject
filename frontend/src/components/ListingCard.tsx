@@ -24,6 +24,7 @@ function ListingCard({ cardID} : { cardID: string}) {
     const myListingsPage = location.pathname === '/my-listings';
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
     const isMobile = useMediaQuery('(max-width: 500px)');
+    const defaultImage = "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YnVzaW5lc3N8ZW58MHx8MHx8fDA%3D";
     const {currentLang,translatedText, handleTranslate, containsHebrew, translationLoading, cardString} = 
     useTranslateHEtoEN(card.title, card.subtitle, card.description);
 
@@ -46,7 +47,7 @@ function ListingCard({ cardID} : { cardID: string}) {
                 alt="picture"
                 fit='cover'
                 loading='lazy'
-                fallbackSrc='https://images.pexels.com/photos/5598328/pexels-photo-5598328.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+                fallbackSrc={defaultImage}
                 />
             </Skeleton>
         
