@@ -9,11 +9,17 @@ const {
 const { createCard } = require("../services/cardsServices.js");
 const { handleSuccess } = require("../utils/handleSuccess.js");
 const { handleError } = require("../utils/errorHandler.js");
-const { authenticateUser } = require("../middleware/authService.js");
+const {
+  authenticateUser,
+  businessAuth,
+} = require("../middleware/authService.js");
+const cardValidation = require("../middleware/cardValidation.js");
+const normalizeCard = require("../utils/normalizeCard.js");
+const e = require("express");
 
 const cardRouter = express.Router();
 
-// get all cards
+// 1 - get all cards
 cardRouter.get("/", async (_req, res) => {
   try {
     const cards = await getAllCards();
@@ -23,19 +29,7 @@ cardRouter.get("/", async (_req, res) => {
   }
 });
 
-// create a new card
-cardRouter.post("/:id", async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const cardData = req.body;
-    const newCard = await createCard(cardData, userId);
-    handleSuccess(res, 201, newCard);
-  } catch (error) {
-    handleError(res, 500, error.message);
-  }
-});
-
-// get card by id
+// 2 - get card by id
 cardRouter.get("/:id", async (req, res) => {
   try {
     const cardId = req.params.id;
@@ -46,7 +40,7 @@ cardRouter.get("/:id", async (req, res) => {
   }
 });
 
-// get cards by user id
+// 3 - get cards by user id
 cardRouter.get("/user", authenticateUser, async (req, res) => {
   try {
     const userId = req.user._id;
@@ -57,16 +51,34 @@ cardRouter.get("/user", authenticateUser, async (req, res) => {
   }
 });
 
-// get liked cards by user id
-cardRouter.get("/liked/:userId", async (req, res) => {
+// 4 - get liked cards by user id
+cardRouter.get("/liked", authenticateUser, async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const userId = req.user._id;
     const likedCards = await getLikedCards(userId);
     handleSuccess(res, 200, likedCards);
   } catch (error) {
     handleError(res, 500, error.message);
   }
 });
+
+// 5 - create a new card
+cardRouter.post(
+  "/create",
+  authenticateUser,
+  businessAuth,
+  cardValidation,
+  async (req, res) => {
+    try {
+      const cardData = req.body;
+      const normalizedCard = await normalizeCard(cardData, req.user._id);
+      const newCard = await createCard(normalizedCard);
+      handleSuccess(res, 201, newCard);
+    } catch (error) {
+      handleError(res, error.status, error.message);
+    }
+  },
+);
 
 // add like to card
 cardRouter.post("/like/:cardId/:userId", async (req, res) => {

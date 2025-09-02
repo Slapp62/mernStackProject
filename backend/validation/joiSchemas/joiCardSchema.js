@@ -1,12 +1,14 @@
 const joi = require("joi");
 
-const cardSchema = joi.object({
+const joiCardSchema = joi.object({
   title: joi.string().min(2).max(256).required(),
   subtitle: joi.string().min(2).max(256).required(),
   description: joi.string().min(2).max(1024).required(),
   phone: joi
     .string()
-    .pattern(/^(\+972|972|0)(2|3|4|8|9|5\d)\d{7}$/)
+    .pattern(
+      /^(\+972[-\s]?|972[-\s]?|0)((2|3|4|8|9)[-\s]?\d{7}|5[0-9][-\s]?\d{7})$/,
+    )
     .required(),
   email: joi.string().email().required(),
   web: joi.string().uri().optional().allow(""),
@@ -29,9 +31,6 @@ const cardSchema = joi.object({
       zip: joi.alternatives().try(joi.string(), joi.number()).required(),
     })
     .required(),
-  bizNumber: joi.number().optional(),
-  likes: joi.array().items(joi.string()).optional(),
-  user_id: joi.string().required(),
 });
 
-module.exports = cardSchema;
+module.exports = joiCardSchema;

@@ -33,6 +33,14 @@ const adminAuth = (req, res, next) => {
   }
 };
 
+const businessAuth = (req, res, next) => {
+  if (!req.user.isBusiness) {
+    handleError(res, 403, "Access denied. Business user access only.");
+  } else {
+    next();
+  }
+};
+
 const userAdminAuth = async (req, res, next) => {
   const requestedUserId = req.params.id;
   if (req.user._id === requestedUserId || req.user.isAdmin) {
@@ -45,5 +53,6 @@ const userAdminAuth = async (req, res, next) => {
 module.exports = {
   authenticateUser,
   adminAuth,
+  businessAuth,
   userAdminAuth,
 };

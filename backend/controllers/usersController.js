@@ -85,34 +85,24 @@ userRouter.put("/:id", authenticateUser, async (req, res) => {
 });
 
 // Toggle user role - Admin only
-userRouter.patch(
-  "/:id",
-  authenticateUser,
-  userAdminAuth,
-  async (req, res) => {
-    try {
-      const userId = req.user._id;
-      const updatedUser = await toggleRole(userId);
-      handleSuccess(res, 200, updatedUser);
-    } catch (error) {
-      handleError(res, 500, error.message);
-    }
-  },
-);
+userRouter.patch("/:id", authenticateUser, userAdminAuth, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const updatedUser = await toggleRole(userId);
+    handleSuccess(res, 200, updatedUser);
+  } catch (error) {
+    handleError(res, 500, error.message);
+  }
+});
 
-userRouter.delete(
-  "/:id",
-  authenticateUser,
-  userAdminAuth,
-  async (req, res) => {
-    try {
-      const userId = req.user._id;
-      await deleteUser(userId);
-      handleSuccess(res, 200, "User deleted successfully");
-    } catch (error) {
-      handleError(res, 500, error.message);
-    }
-  },
-);
+userRouter.delete("/:id", authenticateUser, userAdminAuth, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    await deleteUser(userId);
+    handleSuccess(res, 200, "User deleted successfully");
+  } catch (error) {
+    handleError(res, 500, error.message);
+  }
+});
 
 module.exports = userRouter;

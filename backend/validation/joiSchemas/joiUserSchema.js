@@ -11,7 +11,9 @@ const joiUserSchema = joi.object({
 
   phone: joi
     .string()
-    .pattern(/^(\+972|972|0)(2|3|4|8|9|5\d)\d{7}$/)
+    .pattern(
+      /^(\+972[-\s]?|972[-\s]?|0)((2|3|4|8|9)[-\s]?\d{7}|5[0-9][-\s]?\d{7})$/,
+    )
     .required(),
 
   email: joi.string().email().required(),
