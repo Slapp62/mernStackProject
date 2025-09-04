@@ -1,4 +1,4 @@
-const { handleError } = require("../utils/errorHandler");
+const { handleError } = require("../utils/functionHandlers");
 const joiCardSchema = require("../validation/joiSchemas/joiCardSchema");
 
 const cardValidation = (req, res, next) => {

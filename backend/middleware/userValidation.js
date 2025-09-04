@@ -1,6 +1,6 @@
 const joiLoginSchema = require("../validation/joiSchemas/joiLoginSchema");
 const joiUserSchema = require("../validation/joiSchemas/joiUserSchema");
-const { handleError } = require("../utils/errorHandler");
+const { handleError } = require("../utils/functionHandlers");
 
 const profileValidation = (req, res, next) => {
   const { error } = joiUserSchema.validate(req.body, { abortEarly: false });

@@ -4,7 +4,6 @@ const {
   getCardById,
   getUserCards,
   getLikedCards,
-  addLikeToCard,
   deleteCardById,
   toggleLike,
 } = require("../services/cardsServices.js");

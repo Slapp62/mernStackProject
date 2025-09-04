@@ -10,7 +10,7 @@ const dummyCards = require("./seeding/seedingData/cardSeedingData");
 const startServer = async () => {
   try {
     PORT = config.get("PORT") || 3000
-    const server = app.listen(port, async () => {
+    const server = app.listen(PORT, async () => {
       console.log(chalk.green.bold(`server running on port ${PORT}`));
       await connectToDB();
       if (config.get("NODE_ENV") === "development") {

@@ -1,5 +1,5 @@
 const config = require("config");
-const { handleError } = require("../utils/errorHandler");
+const { handleError } = require("../utils/functionHandlers");
 const { verifyAuthToken } = require("../auth/providers/jwt");
 const Cards = require("../validation/mongoSchemas/cardsSchema");
 

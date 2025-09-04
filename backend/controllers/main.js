@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const userRouter = require("./usersController.js");
 const cardRouter = require("./cardsController.js");
-const { handleError } = require("../utils/errorHandler.js");
+const { handleError } = require("../utils/functionHandlers.js");
 
 const router = Router();
 
