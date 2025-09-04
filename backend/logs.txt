@@ -27,3 +27,8 @@
 ::1 - - [02/Sep/2025:20:55:12 +0000] "GET /api/cards/ HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"
 ::1 - - [02/Sep/2025:21:04:27 +0000] "GET /api/cards/ HTTP/1.1" 200 3717 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"
 ::1 - - [02/Sep/2025:21:04:27 +0000] "GET /api/cards/ HTTP/1.1" 304 - "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0"
+::ffff:127.0.0.1 - - [04/Sep/2025:18:39:45 +0000] "GET /api/cards/ HTTP/1.1" 200 3717 "-" "-"
+::ffff:127.0.0.1 - - [04/Sep/2025:20:18:47 +0000] "GET /api/cards/ HTTP/1.1" 200 3717 "-" "-"
+::ffff:127.0.0.1 - - [04/Sep/2025:20:22:44 +0000] "GET /api/cards/ HTTP/1.1" 200 3717 "-" "-"
+::ffff:127.0.0.1 - - [04/Sep/2025:20:23:18 +0000] "GET /api/cards/ HTTP/1.1" 200 3717 "-" "-"
+::ffff:127.0.0.1 - - [04/Sep/2025:20:30:20 +0000] "GET /api/cards/ HTTP/1.1" 200 3717 "-" "-"

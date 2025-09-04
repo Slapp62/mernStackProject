@@ -9,7 +9,7 @@ const {
   deleteUser,
 } = require("../services/userService.js");
 const { handleError } = require("../utils/errorHandler.js");
-const { handleSuccess } = require("../utils/handleSuccess.js");
+const { handleSuccess } = require("../utils/functionHandlers.js");
 const {
   profileValidation,
   loginValidation,

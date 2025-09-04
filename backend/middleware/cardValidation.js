@@ -1,9 +1,10 @@
+const { handleError } = require("../utils/errorHandler");
 const joiCardSchema = require("../validation/joiSchemas/joiCardSchema");
 
 const cardValidation = (req, res, next) => {
-  const { error } = joiCardSchema.validate(req.body);
+  const { error } = joiCardSchema.validate(req.body, { abortEarly: false });
   if (error) {
-    return res.status(400).send({ error: error.details[0].message });
+    handleError(res, 400, error.details[0].message);
   }
   next();
 };

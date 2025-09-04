@@ -1,6 +1,7 @@
 const config = require("config");
 const { handleError } = require("../utils/errorHandler");
 const { verifyAuthToken } = require("../auth/providers/jwt");
+const Cards = require("../validation/mongoSchemas/cardsSchema");
 
 const tokenGenerator = config.get("TOKEN_GENERATOR") || "jwt";
 
@@ -50,9 +51,24 @@ const userAdminAuth = async (req, res, next) => {
   }
 };
 
+const cardCreatorAuth = (req, res, next) => {
+  const cardId = req.params.id;
+  try {
+    const card = Cards.findById(cardId);
+    if (card.user_id !== req.user._id) {
+      handleError(res, 403, "Access denied. Unauthorized user.");
+    } else {
+      next();
+    }
+  } catch (error) {
+    handleError(res, 500, error.message);
+  }
+}
+
 module.exports = {
   authenticateUser,
   adminAuth,
   businessAuth,
   userAdminAuth,
+  cardCreatorAuth
 };

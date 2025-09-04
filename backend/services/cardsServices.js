@@ -1,4 +1,3 @@
-const c = require("config");
 const Cards = require("../validation/mongoSchemas/cardsSchema");
 const Users = require("../validation/mongoSchemas/usersSchema");
 
@@ -51,35 +50,39 @@ const getLikedCards = async (userId) => {
   return likedCards;
 };
 
-const addLikeToCard = async (cardId, userId) => {
-  const card = await Cards.findById(cardId);
-  if (!card) {
-    throw new Error("Card not found");
-  }
-  card.likes.push(userId);
-  return await card.save();
-};
-
 const editCardById = async (cardId, updateData) => {
-  const updatedCard = await Cards.findByIdAndUpdate(cardId, updateData, {
-    new: true,
-  });
+  const updatedCard = await Cards.findByIdAndUpdate(cardId, updateData, {new: true,});
   if (!updatedCard) {
     throw new Error("Card not found");
   }
+  
   return updatedCard;
 };
 
-const deleteCardById = async (cardId, userId) => {
-  const user = await Users.findById(userId);
-  if (!user.isBusiness) {
-    throw new Error("User is not a business user");
-  }
+const deleteCardById = async (cardId) => {  
   const deletedCard = await Cards.findByIdAndDelete(cardId);
   if (!deletedCard) {
     throw new Error("Card not found");
   }
   return deletedCard;
+};
+
+const toggleLike = async (cardId, userId) => {
+  const card = await Cards.findById(cardId);
+
+  if (!card) {
+    const error = new Error("Card not found");
+    error.status = 400;
+    throw error;
+  }
+
+  if (card.likes.includes(userId)) {
+    const idIndex = card.likes.indexOf(userId);
+    card.likes.splice(idIndex, 1);
+  } else {
+    card.likes.push(userId);
+  }
+  return await card.save();
 };
 
 module.exports = {
@@ -90,5 +93,5 @@ module.exports = {
   getLikedCards,
   editCardById,
   deleteCardById,
-  addLikeToCard,
+  toggleLike,
 };

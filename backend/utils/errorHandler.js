@@ -1,8 +1,0 @@
-const chalk = require("chalk");
-
-const handleError = (res, status, message = "") => {
-  console.log(chalk.redBright.bold(message, status));
-  return res.status(status).send(message);
-};
-
-module.exports = { handleError };
