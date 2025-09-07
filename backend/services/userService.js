@@ -6,7 +6,7 @@ const getAllUsers = async () => {
   const users = await Users.find().select("-password").lean();
   if (!users || users.length === 0) {
     const error = new Error("No users found");
-    error.status = 404;
+    error.status = 400;
     throw error;
   }
   return users;

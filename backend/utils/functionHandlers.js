@@ -11,7 +11,13 @@ const handleSuccess = (res, status, data= {}, message= "",) => {
   return res.status(status).json(responseObject);
 };
 
-const handleError = (res, status, message = "") => {
+const throwError = (status, message ) =>{
+  const error = new Error (message);
+  error.status = status;
+  throw error;
+}
+
+const handleError = (res, status=500, message = "") => {
   const responseObject = {
     success: false,
     message: message,
@@ -21,4 +27,4 @@ const handleError = (res, status, message = "") => {
   return res.status(status).json(responseObject);
 };
 
-module.exports = { handleSuccess, handleError };
+module.exports = { handleSuccess, throwError, handleError };

@@ -21,28 +21,28 @@ const {
 
 const userRouter = express.Router();
 
-// Get all users - Admin only
+// 1 - Get all users - Admin only
 userRouter.get("/", authenticateUser, adminAuth, async (_req, res) => {
   try {
     const users = await getAllUsers();
     handleSuccess(res, 200, users);
   } catch (error) {
-    handleError(res, 500, error.message);
+    handleError(res, error.status || 500, error.message);
   }
 });
 
-// Get user by ID
+// 2 - Get user by ID
 userRouter.get("/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await getUserById(userId);
     handleSuccess(res, 200, user);
   } catch (error) {
-    handleError(res, 500, error.message);
+    handleError(res, error.status, error.message);
   }
 });
 
-// Register a new user
+// 3 - Register a new user
 userRouter.post("/register", profileValidation, async (req, res) => {
   try {
     const userData = req.body;
@@ -54,11 +54,11 @@ userRouter.post("/register", profileValidation, async (req, res) => {
     };
     handleSuccess(res, 200, responseMessage);
   } catch (error) {
-    handleError(res, 500, error.message);
+    handleError(res, error.status, error.message);
   }
 });
 
-// User login
+// 4 - User login
 userRouter.post("/login", loginValidation, async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -66,12 +66,11 @@ userRouter.post("/login", loginValidation, async (req, res) => {
 
     handleSuccess(res, 200, { message: "Login successful", token: token });
   } catch (error) {
-    const status = error.status || 500;
-    handleError(res, status, error.message);
+    handleError(res, error.status, error.message);
   }
 });
 
-// Update user profile
+// 5 - Update user profile
 userRouter.put("/:id", authenticateUser, async (req, res) => {
   try {
     const userId = req.user._id;
@@ -79,28 +78,29 @@ userRouter.put("/:id", authenticateUser, async (req, res) => {
     const updatedUser = await updateProfile(userId, updateData);
     handleSuccess(res, 200, updatedUser);
   } catch (error) {
-    handleError(res, 500, error.message);
+    handleError(res, error.status, error.message);
   }
 });
 
-// Toggle user role - Admin only
+// 6 - Toggle user role - Admin only
 userRouter.patch("/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
     const userId = req.user._id;
     const updatedUser = await toggleRole(userId);
     handleSuccess(res, 200, updatedUser);
   } catch (error) {
-    handleError(res, 500, error.message);
+    handleError(res, error.status, error.message);
   }
 });
 
+// 7 - Delete user
 userRouter.delete("/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
     const userId = req.user._id;
     await deleteUser(userId);
     handleSuccess(res, 200, "User deleted successfully");
   } catch (error) {
-    handleError(res, 500, error.message);
+    handleError(res, error.status, error.message);
   }
 });
 

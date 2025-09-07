@@ -6,6 +6,7 @@ const {
   getLikedCards,
   deleteCardById,
   toggleLike,
+  changeBizNumber,
 } = require("../services/cardsServices.js");
 const { createCard } = require("../services/cardsServices.js");
 const { handleSuccess, handleError } = require("../utils/functionHandlers.js");
@@ -14,6 +15,7 @@ const {
   businessAuth,
   cardCreatorAuth,
   userAdminAuth,
+  adminAuth,
 } = require("../middleware/authService.js");
 const cardValidation = require("../middleware/cardValidation.js");
 const normalizeCard = require("../utils/normalizeCard.js");
@@ -119,7 +121,19 @@ cardRouter.patch("/:id", authenticateUser,  async (req, res) => {
     const updatedCard = await toggleLike(cardId, userId);
     handleSuccess(res, 200, updatedCard, "Card liked successfully");
   } catch (error) {
-    handleError(res, 500, error.message);
+    handleError(res, error.status, error.message);
+  }
+});
+
+// 9 - Change business number
+cardRouter.patch("/bizNumber/:id", authenticateUser, adminAuth,  async (req, res) => {
+  try {
+    const cardId = req.params.id;
+    const {newBizNumber} = req.body;
+    const updatedCard = await changeBizNumber(cardId, newBizNumber);
+    handleSuccess(res, 200, updatedCard, "Card updated successfully");
+  } catch (error) {
+    handleError(res, error.status, error.message);
   }
 });
 

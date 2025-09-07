@@ -1,5 +1,7 @@
+const { log } = require("console");
 const Cards = require("../validation/mongoSchemas/cardsSchema");
 const Users = require("../validation/mongoSchemas/usersSchema");
+const { throwError } = require("../utils/functionHandlers");
 
 const getAllCards = async () => {
   return await Cards.find({});
@@ -71,9 +73,7 @@ const toggleLike = async (cardId, userId) => {
   const card = await Cards.findById(cardId);
 
   if (!card) {
-    const error = new Error("Card not found");
-    error.status = 400;
-    throw error;
+    throwError(400, "Card not found.")
   }
 
   if (card.likes.includes(userId)) {
@@ -85,6 +85,18 @@ const toggleLike = async (cardId, userId) => {
   return await card.save();
 };
 
+const changeBizNumber = async (cardId, newNumber) =>{
+  const allCards = await Cards.find({});  
+  for (const card of allCards) {
+    if (card.bizNumber === Number(newNumber)){
+      throwError(400, "Business number already in use.")
+    }
+  }
+
+  const updatedCard = await Cards.findByIdAndUpdate(cardId, {bizNumber: newNumber}, {new: true});
+  return updatedCard
+}
+
 module.exports = {
   getAllCards,
   createCard,
@@ -94,4 +106,5 @@ module.exports = {
   editCardById,
   deleteCardById,
   toggleLike,
+  changeBizNumber
 };

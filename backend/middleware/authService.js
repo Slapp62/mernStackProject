@@ -9,13 +9,13 @@ const authenticateUser = (req, res, next) => {
   if (tokenGenerator === "jwt") {
     const token = req.header("x-auth-token");
     if (!token) {
-      throw new Error("Access denied, No token provided.");
+      throw new Error("Access denied. No token provided.");
     }
 
     try {
       const userData = verifyAuthToken(token);
       if (!userData) {
-        throw new Error("Access denied, Invalid token.");
+        throw new Error("Access denied. Invalid token.");
       }
 
       req.user = userData;
