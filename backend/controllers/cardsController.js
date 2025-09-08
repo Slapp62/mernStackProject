@@ -7,6 +7,7 @@ const {
   deleteCardById,
   toggleLike,
   changeBizNumber,
+  editCardById,
 } = require("../services/cardsServices.js");
 const { createCard } = require("../services/cardsServices.js");
 const { handleSuccess, handleError } = require("../utils/functionHandlers.js");
@@ -94,7 +95,7 @@ cardRouter.put(
     try {
       const cardId = req.params.id;
       const cardData = req.body;
-      const updatedCard = await updatedCard(cardId, cardData);
+      const updatedCard = await editCardById(cardId, cardData);
       handleSuccess(res, 200, updatedCard, "Card updated successfully");
     } catch (error) {
       handleError(res, 500, error.message);

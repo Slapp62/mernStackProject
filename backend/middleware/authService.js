@@ -124,10 +124,10 @@ const userAdminAuth = async (req, res, next) => {
   }
 };
 
-const cardCreatorAuth = (req, res, next) => {
+const cardCreatorAuth = async (req, res, next) => {
   const cardId = req.params.id;
   try {
-    const card = Cards.findById(cardId);
+    const card = await Cards.findById(cardId);
     if (card.user_id !== req.user._id) {
       throwError(403, "Access denied. Unauthorized user.");
     } else {
