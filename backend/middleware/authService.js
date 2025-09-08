@@ -1,6 +1,5 @@
 const config = require("config");
 const {
-  handleError,
   throwError,
   nextError,
 } = require("../utils/functionHandlers");

@@ -1,4 +1,3 @@
-const { log } = require("console");
 const Cards = require("../validation/mongoSchemas/cardsSchema");
 const Users = require("../validation/mongoSchemas/usersSchema");
 const { throwError } = require("../utils/functionHandlers");
@@ -8,41 +7,35 @@ const getAllCards = async () => {
 };
 
 const createCard = async (cardData) => {
-  try {
-    const newCard = new Cards(cardData);
-    await newCard.save();
-    const responseObject = {
-      title: newCard.title,
-      subtitle: newCard.subtitle,
-      description: newCard.description,
-      phone: newCard.phone,
-      email: newCard.email,
-      web: newCard.web,
-      image: {
-        url: newCard.image.url,
-        alt: newCard.image.alt,
-      },
-      address: {
-        country: newCard.address.country,
-        state: newCard.address.state,
-        city: newCard.address.city,
-        street: newCard.address.street,
-        houseNumber: newCard.address.houseNumber,
-        zip: newCard.address.zip,
-      }
-    };
-    return responseObject;
-  } catch (error) {
-    throwError(400, error.message);
-  }
+  const newCard = new Cards(cardData);
+  await newCard.save();
+  const responseObject = {
+    title: newCard.title,
+    subtitle: newCard.subtitle,
+    description: newCard.description,
+    phone: newCard.phone,
+    email: newCard.email,
+    web: newCard.web,
+    image: {
+      url: newCard.image.url,
+      alt: newCard.image.alt,
+    },
+    address: {
+      country: newCard.address.country,
+      state: newCard.address.state,
+      city: newCard.address.city,
+      street: newCard.address.street,
+      houseNumber: newCard.address.houseNumber,
+      zip: newCard.address.zip,
+    }
+  };
+  return responseObject;
 };
 
 const getCardById = async (id) => {
   const card = await Cards.findById(id);
   if (!card) {
-    const error = new Error("Card not found");
-    error.status = 404;
-    throw error;
+    throwError(404, "Card not found");
   }
   return card;
 };
@@ -50,12 +43,12 @@ const getCardById = async (id) => {
 const getUserCards = async (userId) => {
   const user = await Users.findById(userId);
   if (!user.isBusiness) {
-    throw new Error("User is not a business user");
+    throwError(403, "Access denied. Unauthorized user.");
   }
 
   const userCards = await Cards.find({ user_id: userId });
   if (userCards.length === 0) {
-    throw new Error("User has no cards");
+    throwError(404, "User has no cards");
   }
 
   return userCards;
@@ -64,9 +57,7 @@ const getUserCards = async (userId) => {
 const getLikedCards = async (userId) => {
   const likedCards = await Cards.find({ likes: { $in: userId } });
   if (likedCards.length === 0) {
-    const error = new Error("No liked cards");
-    error.status = 404;
-    throw error;
+    throwError(404, "User has no liked cards");
   }
   return likedCards;
 };
@@ -76,7 +67,7 @@ const editCardById = async (cardId, updateData) => {
     new: true,
   });
   if (!updatedCard) {
-    throw new Error("Card not found");
+    throwError(404, "Card not found");
   }
 
   return updatedCard;
@@ -85,7 +76,7 @@ const editCardById = async (cardId, updateData) => {
 const deleteCardById = async (cardId) => {
   const deletedCard = await Cards.findByIdAndDelete(cardId);
   if (!deletedCard) {
-    throw new Error("Card not found");
+    throwError(404, "Card not found");
   }
   return deletedCard;
 };

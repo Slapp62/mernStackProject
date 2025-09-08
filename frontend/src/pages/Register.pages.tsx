@@ -29,15 +29,15 @@ export function RegisterForm()  {
         if (!data.image?.alt?.trim()) {data.image.alt = 'default fox avatar'};
 
         try {
-            const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
+            const API_BASE_URL = import.meta.env.VITE_API_URL;
             const response = await axios.post(`${API_BASE_URL}/api/users/register`, data);
             
-            if (response.data.success === true) {
+            if (response.status === 201) {
                 jumpTo('/login');
                 toast.success('Registered!') 
             }
         } catch (error: any) {
-            toast.error(`Registration Failed! ${error.message}`);
+            toast.error(error.response.data.message);
         }
     }
         

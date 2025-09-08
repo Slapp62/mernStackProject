@@ -4,9 +4,10 @@ import axios from "axios";
 
 
 export const fetchCardsThunk = createAsyncThunk('card/fetchCards', async () => {
-  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  
   const response = await axios.get(`${API_BASE_URL}/api/cards/`);  
-  return response.data.data;
+  return response.data;
 })
 
 type CardState = {

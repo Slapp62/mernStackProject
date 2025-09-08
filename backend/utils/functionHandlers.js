@@ -1,14 +1,9 @@
 const chalk = require("chalk");
+const { m } = require("framer-motion");
 
 const handleSuccess = (res, status, data = {}, message = "") => {
-  const responseObject = {
-    success: true,
-    message: message,
-    data: data,
-  };
-
   console.log(chalk.blueBright.bold(message, status));
-  return res.status(status).json(responseObject);
+  return res.status(status).json(data);
 };
 
 const throwError = (status, message) => {
@@ -24,13 +19,8 @@ const nextError = (next, status, message) => {
 };
 
 const handleError = (res, status = 500, message = "") => {
-  const responseObject = {
-    success: false,
-    message: message,
-  };
-
   console.log(chalk.redBright.bold(message, status));
-  return res.status(status).json(responseObject);
+  return res.status(status).json({ message: message });
 };
 
 module.exports = { handleSuccess, throwError, nextError, handleError };

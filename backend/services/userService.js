@@ -1,58 +1,50 @@
-const { verifyPassword, encryptPassword } = require("../utils/bcrypt");
-const Users = require("../validation/mongoSchemas/usersSchema");
-const { generateAuthToken } = require("../auth/providers/jwt");
+const { encryptPassword } = require("../utils/bcrypt");
 const { throwError } = require("../utils/functionHandlers");
-const { add } = require("lodash");
+const Users = require("../validation/mongoSchemas/usersSchema");
 
 const getAllUsers = async () => {
   const users = await Users.find().select("-password").lean();
   if (!users || users.length === 0) {
-    const error = new Error("No users found");
-    error.status = 400;
-    throw error;
+    throwError(400, "No users found");
   }
   return users;
 };
 
 const registerUser = async (userData) => {
-  try {
-    const existingUser = await Users.findOne({ email: userData.email });
-    if (existingUser) {
-      const error = new Error("User already exists");
-      error.status = 400;
-      throw error;
-    }
-
-    const encryptedPassword = await encryptPassword(userData.password);
-    userData.password = encryptedPassword;
-    const newUser = new Users(userData);
-    await newUser.save();
-    const responseMessage = {
-      name: {
-        first: newUser.name.first,
-        middle: newUser.name.middle,
-        last: newUser.name.last,
-      },
-      address: {
-        country: newUser.address.country,
-        state: newUser.address.state,
-        city: newUser.address.city,
-        street: newUser.address.street,
-        houseNumber: newUser.address.houseNumber,
-        zip: newUser.address.zip,
-      },
-      phone: newUser.phone,
-      image: {
-        url: newUser.image.url,
-        alt: newUser.image.alt,
-      },
-      isBusiness: newUser.isBusiness,
-      email: newUser.email,
-    };
-    return responseMessage; 
-  } catch (error) {
-    throw new Error("Error creating user: " + error.message);
+  const existingUser = await Users.findOne({ email: userData.email });
+  if (existingUser) {
+    const error = new Error("User already exists");
+    error.status = 400;
+    throw error;
   }
+
+  const encryptedPassword = await encryptPassword(userData.password);
+  userData.password = encryptedPassword;
+  const newUser = new Users(userData);
+  await newUser.save();
+  const responseMessage = {
+    name: {
+      first: newUser.name.first,
+      middle: newUser.name.middle,
+      last: newUser.name.last,
+    },
+    address: {
+      country: newUser.address.country,
+      state: newUser.address.state,
+      city: newUser.address.city,
+      street: newUser.address.street,
+      houseNumber: newUser.address.houseNumber,
+      zip: newUser.address.zip,
+    },
+    phone: newUser.phone,
+    image: {
+      url: newUser.image.url,
+      alt: newUser.image.alt,
+    },
+    isBusiness: newUser.isBusiness,
+    email: newUser.email,
+  };
+  return responseMessage; 
 };
 
 const getUserById = async (userId) => {
@@ -60,9 +52,7 @@ const getUserById = async (userId) => {
     .select("-password -isAdmin -__v")
     .lean();
   if (!user) {
-    const error = new Error("User not found");
-    error.status = 404;
-    throw error;
+    throwError(404, "User not found");
   }
   return user;
 };
@@ -74,7 +64,7 @@ const updateProfile = async (userId, updateData) => {
 const toggleRole = async (userId) => {
   const user = await Users.findById(userId);
   if (!user) {
-    throw new Error("User not found");
+    throwError(404, "User not found");
   }
   const isBusiness = !user.isBusiness;
   return await Users.findByIdAndUpdate(userId, { isBusiness }, { new: true });

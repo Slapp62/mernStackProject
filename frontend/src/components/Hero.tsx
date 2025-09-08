@@ -35,7 +35,7 @@ export function Hero() {
             w='100%'
             >
               {/* Conditional Welcome Message */}
-              {!user && <Title ta='center' c='white'>Find your next career!</Title>}
+              {!user && <Title order={2} ta='center' c='white'>List your business. Get seen by millions.</Title>}
               {user && <Text ta='center' c='blue'fw='bold' fz={30}>Welcome Back, {user.name.first}</Text>}
 
               {/* Search & Sort */}
@@ -71,8 +71,8 @@ export function Hero() {
 
             {/* Conditinally Register */}
             {!user &&  
-              <Title order={2} ta='center' style={{color: "lightgreen"}}>
-              <Link to="register" style={{textDecoration: "", color: "lightgreen"}}>Register</Link> now and start your journey
+              <Title order={3} ta='center' style={{color: "lightgreen"}}>
+              <Link to="register" style={{textDecoration: "", color: "lightgreen"}}>Register</Link> now to get started!
               </Title>}
 
             {/* Conditinally Create Listing */}

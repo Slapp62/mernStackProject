@@ -14,7 +14,6 @@ export function CardDetails() {
     const user = useSelector((state:RootState) => state.userSlice.user);
     const allCards = useSelector((state:RootState) => state.cardSlice.cards);
     const card = allCards.find((card) => card._id === id);
-    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
     const {currentLang, translatedText, handleTranslate, containsHebrew, translationLoading, cardString} = 
         useTranslateHEtoEN(card?.title, card?.subtitle, card?.description);
@@ -72,21 +71,6 @@ export function CardDetails() {
                                 <ListItem><strong>Number:</strong> {card?.address.houseNumber}</ListItem>
                                 <ListItem><strong>Zipcode:</strong> {card?.address.zip}</ListItem>
                             </List>
-
-                            <Flex>
-                                {card && 
-                                <iframe
-                                    title="Google Map"
-                                    width="100%"
-                                    height="300"
-                                    style={{ border: 0, borderRadius: "10px", marginTop: "0rem" }}
-                                    src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(
-                                        `${card.address.street} ${card.address.houseNumber}, ${card.address.city}, ${card.address.country}`
-                                    )}`}
-                                    allowFullScreen
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                />}
-                            </Flex>
                         </Flex>
                     </Flex>     
                 </Card.Section>

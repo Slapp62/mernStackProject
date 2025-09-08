@@ -27,7 +27,7 @@ export const useEditProfile = () => {
     const paramsUser = allUsers?.find((account) => account._id === id);
         
     const userData = isAdminView ? paramsUser : currentUser;
-     const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
+     const API_BASE_URL = import.meta.env.VITE_API_URL;
 
     const {register, handleSubmit, reset, formState: {errors, isValid, isDirty}, trigger} = useForm<TUsers>({
         mode: 'all',
@@ -55,8 +55,8 @@ export const useEditProfile = () => {
             const response = await axios.put(
                 `${API_BASE_URL}/api/users/${userData?._id}`, data);
 
-            if (response.data.success === true) {
-                const updatedUser = response.data.data;
+            if (response.status === 200) {
+                const updatedUser = response.data;
 
                 // if not admin view, update the current user information
                 if (!isAdminView) {
@@ -82,8 +82,8 @@ export const useEditProfile = () => {
         axios.defaults.headers.common['x-auth-token'] = token;
         try {
             const response = await axios.patch(`${API_BASE_URL}/api/users/${userData?._id}`);
-            if (response.data.success === true) {
-                const updatedUser = response.data.data;
+            if (response.status === 200) {
+                const updatedUser = response.data;
                 setSubmitting(true);
                 setTimeout(() => {
                     // if not admin view, update the current user information
@@ -99,10 +99,7 @@ export const useEditProfile = () => {
                 }, 2000);
             }
         } catch (error : any) {
-            toast.error(`Account Status Update Failed! ${error.response.data}`, {position: `bottom-right`});
-            if (error.response){
-                toast.error(`Account Status Update Failed! ${error.response.data}`, {position: `bottom-right`});
-            }
+            toast.error(error.response.data.message, {position: `bottom-right`});
         }
     }
 
@@ -111,12 +108,12 @@ export const useEditProfile = () => {
         axios.defaults.headers.common['x-auth-token'] = token;
         try {
             const response = await axios.delete(`${API_BASE_URL}/api/users/${userData?._id}`);
-            if (response.data.success === true) {
+            if (response.status === 200) {
                 !isAdminView ? dispatch(clearUser()) : jumpTo('/admin');
                 toast.warning('Account Deleted.', {position: 'bottom-right'})
             }
         } catch (error : any) {
-            toast.error(`Account Deletion Failed! ${error.response.data}`, {position: `bottom-right`});
+            toast.error(error.response.data.message, {position: `bottom-right`});
         }
     }
     
