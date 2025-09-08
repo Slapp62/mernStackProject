@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 const router = require("./controllers/main");
 const morgan = require("morgan");
 const errorLogger = require("./middleware/logging/errorLogger");
-require("./middleware/logging/morganTokens")
+require("./middleware/logging/morganTokens");
 dotenv.config();
 const app = express();
 
@@ -14,10 +14,12 @@ app.use(
   cors({
     origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true,
-  })
+  }),
 );
 
-app.use(morgan('Server Log: [:localtime] :method :url :status :response-time ms'))
+app.use(
+  morgan("Server Log: [:localtime] :method :url :status :response-time ms"),
+);
 
 app.use(express.json());
 

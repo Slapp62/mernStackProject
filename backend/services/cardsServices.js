@@ -53,15 +53,17 @@ const getLikedCards = async (userId) => {
 };
 
 const editCardById = async (cardId, updateData) => {
-  const updatedCard = await Cards.findByIdAndUpdate(cardId, updateData, {new: true,});
+  const updatedCard = await Cards.findByIdAndUpdate(cardId, updateData, {
+    new: true,
+  });
   if (!updatedCard) {
     throw new Error("Card not found");
   }
-  
+
   return updatedCard;
 };
 
-const deleteCardById = async (cardId) => {  
+const deleteCardById = async (cardId) => {
   const deletedCard = await Cards.findByIdAndDelete(cardId);
   if (!deletedCard) {
     throw new Error("Card not found");
@@ -73,7 +75,7 @@ const toggleLike = async (cardId, userId) => {
   const card = await Cards.findById(cardId);
 
   if (!card) {
-    throwError(400, "Card not found.")
+    throwError(400, "Card not found.");
   }
 
   if (card.likes.includes(userId)) {
@@ -85,17 +87,21 @@ const toggleLike = async (cardId, userId) => {
   return await card.save();
 };
 
-const changeBizNumber = async (cardId, newNumber) =>{
-  const allCards = await Cards.find({});  
+const changeBizNumber = async (cardId, newNumber) => {
+  const allCards = await Cards.find({});
   for (const card of allCards) {
-    if (card.bizNumber === Number(newNumber)){
-      throwError(400, "Business number already in use.")
+    if (card.bizNumber === Number(newNumber)) {
+      throwError(400, "Business number already in use.");
     }
   }
 
-  const updatedCard = await Cards.findByIdAndUpdate(cardId, {bizNumber: newNumber}, {new: true});
-  return updatedCard
-}
+  const updatedCard = await Cards.findByIdAndUpdate(
+    cardId,
+    { bizNumber: newNumber },
+    { new: true },
+  );
+  return updatedCard;
+};
 
 module.exports = {
   getAllCards,
@@ -106,5 +112,5 @@ module.exports = {
   editCardById,
   deleteCardById,
   toggleLike,
-  changeBizNumber
+  changeBizNumber,
 };

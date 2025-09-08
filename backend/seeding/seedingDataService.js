@@ -32,7 +32,7 @@ const seedDevData = async (users, cards) => {
     } catch (error) {
       console.error("Error seeding card:", error);
     }
-  }  
+  }
 };
 
 const seedTestData = async (users, cards) => {
@@ -63,7 +63,7 @@ const seedTestData = async (users, cards) => {
     } catch (error) {
       console.error("Error seeding card:", error);
     }
-  } 
+  }
 };
 
 module.exports = {

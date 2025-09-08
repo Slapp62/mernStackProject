@@ -62,14 +62,20 @@ userRouter.post("/register", profileValidation, async (req, res) => {
 });
 
 // 4 - User login
-userRouter.post("/login", loginValidation, lockoutCheck, verifyCredentials, async (req, res) => {
-  try {
-    const token = generateAuthToken(req.user);
-    handleSuccess(res, 200, token, "Login successful");
-  } catch (error) {
-    handleError(res, error.status, error.message);
-  }
-});
+userRouter.post(
+  "/login",
+  loginValidation,
+  lockoutCheck,
+  verifyCredentials,
+  async (req, res) => {
+    try {
+      const token = generateAuthToken(req.user);
+      handleSuccess(res, 200, token, "Login successful");
+    } catch (error) {
+      handleError(res, error.status, error.message);
+    }
+  },
+);
 
 // 5 - Update user profile
 userRouter.put("/:id", authenticateUser, async (req, res) => {

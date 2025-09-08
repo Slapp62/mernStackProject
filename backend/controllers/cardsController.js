@@ -85,21 +85,22 @@ cardRouter.post(
 
 // 6 - edit card by id
 cardRouter.put(
-  "/:id", 
-  authenticateUser, 
-  businessAuth, 
-  cardCreatorAuth, 
-  cardValidation, 
+  "/:id",
+  authenticateUser,
+  businessAuth,
+  cardCreatorAuth,
+  cardValidation,
   async (req, res) => {
-  try {
-    const cardId = req.params.id;
-    const cardData = req.body;
-    const updatedCard = await updatedCard(cardId, cardData);
-    handleSuccess(res, 200, updatedCard, "Card updated successfully");
-  } catch (error) {
-    handleError(res, 500, error.message);
-  }
-});
+    try {
+      const cardId = req.params.id;
+      const cardData = req.body;
+      const updatedCard = await updatedCard(cardId, cardData);
+      handleSuccess(res, 200, updatedCard, "Card updated successfully");
+    } catch (error) {
+      handleError(res, 500, error.message);
+    }
+  },
+);
 
 // 7 - delete card by id
 cardRouter.delete("/:id", authenticateUser, userAdminAuth, async (req, res) => {
@@ -114,7 +115,7 @@ cardRouter.delete("/:id", authenticateUser, userAdminAuth, async (req, res) => {
 });
 
 // 8 - add like to card
-cardRouter.patch("/:id", authenticateUser,  async (req, res) => {
+cardRouter.patch("/:id", authenticateUser, async (req, res) => {
   try {
     const cardId = req.params.id;
     const userId = req.user._id;
@@ -126,15 +127,20 @@ cardRouter.patch("/:id", authenticateUser,  async (req, res) => {
 });
 
 // 9 - Change business number
-cardRouter.patch("/bizNumber/:id", authenticateUser, adminAuth,  async (req, res) => {
-  try {
-    const cardId = req.params.id;
-    const {newBizNumber} = req.body;
-    const updatedCard = await changeBizNumber(cardId, newBizNumber);
-    handleSuccess(res, 200, updatedCard, "Card updated successfully");
-  } catch (error) {
-    handleError(res, error.status, error.message);
-  }
-});
+cardRouter.patch(
+  "/bizNumber/:id",
+  authenticateUser,
+  adminAuth,
+  async (req, res) => {
+    try {
+      const cardId = req.params.id;
+      const { newBizNumber } = req.body;
+      const updatedCard = await changeBizNumber(cardId, newBizNumber);
+      handleSuccess(res, 200, updatedCard, "Card updated successfully");
+    } catch (error) {
+      handleError(res, error.status, error.message);
+    }
+  },
+);
 
 module.exports = cardRouter;

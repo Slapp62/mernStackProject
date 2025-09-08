@@ -13,7 +13,7 @@ beforeAll(async () => {
     console.log(chalk.green.bold(`Test database connected on port ${PORT}`));
   } catch (error) {
     console.error("Failed to connect to test database:", error);
-    process.exit(1); 
+    process.exit(1);
   }
 });
 
@@ -23,7 +23,7 @@ beforeEach(async () => {
     console.log(chalk.green.bold("Test data seeded"));
   } catch (error) {
     console.error("Failed to seed test data:", error);
-    throw error; 
+    throw error;
   }
 });
 
