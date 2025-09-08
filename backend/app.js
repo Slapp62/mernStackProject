@@ -15,7 +15,7 @@ app.use(
     origin: [
       "http://localhost:5173", 
       "http://localhost:5174", 
-      "https://mernstackproject-ttam.onrender.com"
+      "https://mernstackproject-client.onrender.com"
     ],
     credentials: true,
   }),
