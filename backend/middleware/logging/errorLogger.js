@@ -15,8 +15,6 @@ const errorLogger = (_req, res, next) => {
 
       const data = `${date} ${res.statusCode} ${res.statusMessage}\n`;
 
-      console.log(chalk.bgBlueBright('data', data));
-
       fs.appendFileSync(fullPath, data);      
     };
   });

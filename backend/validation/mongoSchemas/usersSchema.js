@@ -43,6 +43,16 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  loginAttempts: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  loginTimeout: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
   image: {
     url: {
       type: String,

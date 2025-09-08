@@ -17,7 +17,10 @@ const {
   authenticateUser,
   adminAuth,
   userAdminAuth,
+  lockoutCheck,
+  verifyCredentials,
 } = require("../middleware/authService.js");
+const { generateAuthToken } = require("../auth/providers/jwt.js");
 
 const userRouter = express.Router();
 
@@ -59,12 +62,10 @@ userRouter.post("/register", profileValidation, async (req, res) => {
 });
 
 // 4 - User login
-userRouter.post("/login", loginValidation, async (req, res) => {
+userRouter.post("/login", loginValidation, lockoutCheck, verifyCredentials, async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const token = await verifyUserCredentials(email, password);
-
-    handleSuccess(res, 200, { message: "Login successful", token: token });
+    const token = generateAuthToken(req.user);
+    handleSuccess(res, 200, token, "Login successful");
   } catch (error) {
     handleError(res, error.status, error.message);
   }

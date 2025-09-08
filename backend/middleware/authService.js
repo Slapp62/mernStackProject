@@ -1,9 +1,57 @@
 const config = require("config");
-const { handleError } = require("../utils/functionHandlers");
+const { handleError, throwError } = require("../utils/functionHandlers");
 const { verifyAuthToken } = require("../auth/providers/jwt");
 const Cards = require("../validation/mongoSchemas/cardsSchema");
+const Users = require("../validation/mongoSchemas/usersSchema");
+const { verifyPassword } = require("../utils/bcrypt");
 
 const tokenGenerator = config.get("TOKEN_GENERATOR") || "jwt";
+
+const lockoutCheck = async (req, res, next) => {
+  const {email} = req.body;
+
+  try {
+    const user = await Users.findOne({ email });
+    const isPrevTimeout = user.loginTimeout > 0;
+    const isLockedOut = Date.now() - user.loginTimeout < 60 * 1000;
+  
+    if (isPrevTimeout && isLockedOut) {
+      throwError(403, "Access denied. You have been locked out.")
+    } 
+    next();
+  } catch (error) {
+    handleError(res, error.status, error.message);
+  }
+}
+
+const verifyCredentials = async (req, res, next) => {
+  const {email, password} = req.body;
+  const user = await Users.findOne({ email });
+  const enteredPassword = password;
+  const savedPassword = user.password;
+  const isPasswordValid = await verifyPassword(enteredPassword, savedPassword);
+  const loginAttempts = user.loginAttempts;
+
+  if (user && !isPasswordValid){  
+    user.loginAttempts = loginAttempts + 1;
+    await user.save();
+
+    if (user.loginAttempts === 3) {
+      user.loginTimeout = Date.now()
+      await user.save();
+    }
+  }
+
+  if (!isPasswordValid || !user) {
+    throwError(401, "Invalid email or password.");
+  }
+
+  user.loginAttempts = 0;
+  user.loginTimeout = 0;
+  await user.save();
+  req.user = user;
+  next();
+};
 
 const authenticateUser = (req, res, next) => {
   if (tokenGenerator === "jwt") {
@@ -66,9 +114,11 @@ const cardCreatorAuth = (req, res, next) => {
 }
 
 module.exports = {
+  verifyCredentials,
   authenticateUser,
   adminAuth,
   businessAuth,
   userAdminAuth,
-  cardCreatorAuth
+  cardCreatorAuth,
+  lockoutCheck
 };

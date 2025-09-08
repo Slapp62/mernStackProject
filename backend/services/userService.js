@@ -1,6 +1,7 @@
 const { verifyPassword, encryptPassword } = require("../utils/bcrypt");
 const Users = require("../validation/mongoSchemas/usersSchema");
 const { generateAuthToken } = require("../auth/providers/jwt");
+const { throwError } = require("../utils/functionHandlers");
 
 const getAllUsers = async () => {
   const users = await Users.find().select("-password").lean();
@@ -42,21 +43,6 @@ const getUserById = async (userId) => {
   return user;
 };
 
-const verifyUserCredentials = async (email, enteredPassword) => {
-  const user = await Users.findOne({ email });
-  const savedPassword = user.password;
-  const isPasswordValid = await verifyPassword(enteredPassword, savedPassword);
-
-  if (!user || !isPasswordValid) {
-    const error = new Error("Invalid email or password");
-    error.status = 400;
-    throw error;
-  }
-
-  const token = generateAuthToken(user);
-  return token;
-};
-
 const updateProfile = async (userId, updateData) => {
   return await Users.findByIdAndUpdate(userId, updateData, { new: true });
 };
@@ -78,7 +64,6 @@ module.exports = {
   getAllUsers,
   registerUser,
   getUserById,
-  verifyUserCredentials,
   toggleRole,
   updateProfile,
   deleteUser,
