@@ -29,12 +29,12 @@ export function RegisterForm()  {
         if (!data.image?.alt?.trim()) {data.image.alt = 'default fox avatar'};
 
         try {
-            const response = await axios.post(
-                'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users', 
-                data)
-            if (response.status === 201) {
+            const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
+            const response = await axios.post(`${API_BASE_URL}/api/users/register`, data);
+            
+            if (response.data.success === true) {
                 jumpTo('/login');
-                toast.success('Registered!')
+                toast.success('Registered!') 
             }
         } catch (error: any) {
             toast.error(`Registration Failed! ${error.message}`);

@@ -19,9 +19,10 @@ export function useAuthInit() {
                     const id = decodedToken._id;
 
                     axios.defaults.headers.common['x-auth-token'] = token;
-                    const userData = await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${id}`)
+                    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
+                    const userData = await axios.get(`${API_BASE_URL}/api/users/${id}`)
 
-                    dispatch(setUser(userData.data))
+                    dispatch(setUser(userData.data.data))
                 } catch (error : any) {
                 toast.error('Could not auto-login in. Please login again.', error.response.data)
                 }

@@ -27,6 +27,7 @@ export const useEditProfile = () => {
     const paramsUser = allUsers?.find((account) => account._id === id);
         
     const userData = isAdminView ? paramsUser : currentUser;
+     const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
 
     const {register, handleSubmit, reset, formState: {errors, isValid, isDirty}, trigger} = useForm<TUsers>({
         mode: 'all',
@@ -52,10 +53,10 @@ export const useEditProfile = () => {
         data.address.zip = Number(data.address.zip);
         try {
             const response = await axios.put(
-                `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${userData?._id}`, data);
+                `${API_BASE_URL}/api/users/${userData?._id}`, data);
 
-            if (response.status === 200) {
-                const updatedUser = response.data;
+            if (response.data.success === true) {
+                const updatedUser = response.data.data;
 
                 // if not admin view, update the current user information
                 if (!isAdminView) {
@@ -80,9 +81,9 @@ export const useEditProfile = () => {
         const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
         axios.defaults.headers.common['x-auth-token'] = token;
         try {
-            const response = await axios.patch(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${userData?._id}`);
-            if (response.status === 200){
-                const updatedUser = response.data;
+            const response = await axios.patch(`${API_BASE_URL}/api/users/${userData?._id}`);
+            if (response.data.success === true) {
+                const updatedUser = response.data.data;
                 setSubmitting(true);
                 setTimeout(() => {
                     // if not admin view, update the current user information
@@ -109,8 +110,8 @@ export const useEditProfile = () => {
         const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
         axios.defaults.headers.common['x-auth-token'] = token;
         try {
-            const response = await axios.delete(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${userData?._id}`);
-            if (response.status === 200){
+            const response = await axios.delete(`${API_BASE_URL}/api/users/${userData?._id}`);
+            if (response.data.success === true) {
                 !isAdminView ? dispatch(clearUser()) : jumpTo('/admin');
                 toast.warning('Account Deleted.', {position: 'bottom-right'})
             }

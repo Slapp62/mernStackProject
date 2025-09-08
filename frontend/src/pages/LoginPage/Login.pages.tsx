@@ -85,22 +85,23 @@ export function LoginPage() {
   const onSubmit = async (data: FieldValues) => {
     setIsLoading(true);
     try {
-      const {data: token} = await axios.post("https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/login",
+      const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
+      const response = await axios.post(`${API_BASE_URL}/api/users/login`,
         {
           email: data.email, 
           password: data.password,
         });
-
       
+      const token = response.data.data;
       localStorage.setItem('rememberMe', rememberMe ? 'true ': 'false');
       localStorage.setItem('token', token);
 
       axios.defaults.headers.common['x-auth-token'] = token;
 
       const { _id } = jwtDecode<TdecodedToken>(token);
-      const userResponse = await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${_id}`)
+      const userResponse = await axios.get(`${API_BASE_URL}/api/users/${_id}`)
     
-      dispatch(setUser(userResponse.data))
+      dispatch(setUser(userResponse.data.data))
       toast.success('Logged In!', {position: 'bottom-right'});
       setLoginAttempts(0);
       localStorage.removeItem('loginAttempts');

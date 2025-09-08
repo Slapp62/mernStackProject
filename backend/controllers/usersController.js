@@ -50,7 +50,7 @@ userRouter.post("/register", profileValidation, async (req, res) => {
     const userData = req.body;
     const user = await registerUser(userData);
     
-    handleSuccess(res, 200, user, "User registered successfully.");
+    handleSuccess(res, 201, user, "User registered successfully.");
   } catch (error) {
     handleError(res, error.status, error.message);
   }
