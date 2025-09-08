@@ -45,7 +45,7 @@ cardRouter.get("/:id", async (req, res) => {
 });
 
 // 3 - get cards by user id
-cardRouter.get("/user", authenticateUser, async (req, res) => {
+cardRouter.get("/my-cards", authenticateUser, async (req, res) => {
   try {
     const userId = req.user._id;
     const userCards = await getUserCards(userId);
@@ -68,7 +68,7 @@ cardRouter.get("/liked", authenticateUser, async (req, res) => {
 
 // 5 - create a new card
 cardRouter.post(
-  "/create",
+  "/",
   authenticateUser,
   businessAuth,
   cardValidation,

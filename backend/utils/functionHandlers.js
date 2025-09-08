@@ -1,5 +1,4 @@
 const chalk = require("chalk");
-const { m } = require("framer-motion");
 
 const handleSuccess = (res, status, data = {}, message = "") => {
   console.log(chalk.blueBright.bold(message, status));
