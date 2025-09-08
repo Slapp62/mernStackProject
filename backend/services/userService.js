@@ -2,6 +2,7 @@ const { verifyPassword, encryptPassword } = require("../utils/bcrypt");
 const Users = require("../validation/mongoSchemas/usersSchema");
 const { generateAuthToken } = require("../auth/providers/jwt");
 const { throwError } = require("../utils/functionHandlers");
+const { add } = require("lodash");
 
 const getAllUsers = async () => {
   const users = await Users.find().select("-password").lean();
@@ -25,7 +26,30 @@ const registerUser = async (userData) => {
     const encryptedPassword = await encryptPassword(userData.password);
     userData.password = encryptedPassword;
     const newUser = new Users(userData);
-    return await newUser.save();
+    await newUser.save();
+    const responseMessage = {
+      name: {
+        first: newUser.name.first,
+        middle: newUser.name.middle,
+        last: newUser.name.last,
+      },
+      address: {
+        country: newUser.address.country,
+        state: newUser.address.state,
+        city: newUser.address.city,
+        street: newUser.address.street,
+        houseNumber: newUser.address.houseNumber,
+        zip: newUser.address.zip,
+      },
+      phone: newUser.phone,
+      image: {
+        url: newUser.image.url,
+        alt: newUser.image.alt,
+      },
+      isBusiness: newUser.isBusiness,
+      email: newUser.email,
+    };
+    return responseMessage; 
   } catch (error) {
     throw new Error("Error creating user: " + error.message);
   }

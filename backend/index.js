@@ -9,7 +9,7 @@ const dummyCards = require("./seeding/seedingData/cardSeedingData");
 // Function-based startup for explicit control
 const startServer = async () => {
   try {
-    PORT = config.get("PORT") || 3000;
+    PORT = process.env.PORT || config.get("PORT") || 3000;
     const server = app.listen(PORT, async () => {
       console.log(chalk.green.bold(`server running on port ${PORT}`));
       await connectToDB();

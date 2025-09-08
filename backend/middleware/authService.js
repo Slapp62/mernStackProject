@@ -11,11 +11,14 @@ const { verifyPassword } = require("../utils/bcrypt");
 
 const tokenGenerator = config.get("TOKEN_GENERATOR") || "jwt";
 
-const lockoutCheck = async (req, res, next) => {
+const lockoutCheck = async (req, _res, next) => {
   const { email } = req.body;
 
   try {
     const user = await Users.findOne({ email });
+    if (!user) {
+      return next();
+    }
     const isPrevTimeout = user.loginTimeout > 0;
     const isLockedOut = Date.now() - user.loginTimeout < 60 * 1000;
     const lockoutTime = 60 - (Date.now() - user.loginTimeout) / 1000;
@@ -42,6 +45,10 @@ const verifyCredentials = async (req, _res, next) => {
   try {
     const { email, password } = req.body;
     const user = await Users.findOne({ email });
+    if (!user) {
+      throwError(401, "Invalid email or password.");
+    }
+
     const enteredPassword = password;
     const savedPassword = user.password;
     const isPasswordValid = await verifyPassword(
@@ -52,15 +59,12 @@ const verifyCredentials = async (req, _res, next) => {
 
     if (user && !isPasswordValid) {
       user.loginAttempts = loginAttempts + 1;
-      await user.save();
 
       if (user.loginAttempts === 3) {
         user.loginTimeout = Date.now();
-        await user.save();
       }
-    }
 
-    if (!isPasswordValid || !user) {
+      await user.save();
       throwError(401, "Invalid email or password.");
     }
 
@@ -104,7 +108,7 @@ const adminAuth = (req, res, next) => {
   }
 };
 
-const businessAuth = (req, res, next) => {
+const businessAuth = (req, _res, next) => {
   if (!req.user.isBusiness) {
     return nextError(next, 403, "Access denied. Business access only.");
   } else {

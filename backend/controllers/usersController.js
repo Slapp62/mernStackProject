@@ -2,7 +2,6 @@ const express = require("express");
 const {
   getAllUsers,
   registerUser,
-  verifyUserCredentials,
   getUserById,
   toggleRole,
   updateProfile,
@@ -28,7 +27,7 @@ const userRouter = express.Router();
 userRouter.get("/", authenticateUser, adminAuth, async (_req, res) => {
   try {
     const users = await getAllUsers();
-    handleSuccess(res, 200, users);
+    handleSuccess(res, 200, users, "Users fetched successfully.");
   } catch (error) {
     handleError(res, error.status || 500, error.message);
   }
@@ -39,7 +38,7 @@ userRouter.get("/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await getUserById(userId);
-    handleSuccess(res, 200, user);
+    handleSuccess(res, 200, user, "User fetched successfully.");
   } catch (error) {
     handleError(res, error.status, error.message);
   }
@@ -50,12 +49,8 @@ userRouter.post("/register", profileValidation, async (req, res) => {
   try {
     const userData = req.body;
     const user = await registerUser(userData);
-    const responseMessage = {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-    };
-    handleSuccess(res, 200, responseMessage);
+    
+    handleSuccess(res, 200, user, "User registered successfully.");
   } catch (error) {
     handleError(res, error.status, error.message);
   }
@@ -83,7 +78,7 @@ userRouter.put("/:id", authenticateUser, async (req, res) => {
     const userId = req.user._id;
     const updateData = req.body;
     const updatedUser = await updateProfile(userId, updateData);
-    handleSuccess(res, 200, updatedUser);
+    handleSuccess(res, 200, updatedUser, "Profile updated successfully.");
   } catch (error) {
     handleError(res, error.status, error.message);
   }
@@ -94,7 +89,7 @@ userRouter.patch("/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
     const userId = req.user._id;
     const updatedUser = await toggleRole(userId);
-    handleSuccess(res, 200, updatedUser);
+    handleSuccess(res, 200, updatedUser, "Role updated successfully.");
   } catch (error) {
     handleError(res, error.status, error.message);
   }
@@ -105,7 +100,7 @@ userRouter.delete("/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
     const userId = req.user._id;
     await deleteUser(userId);
-    handleSuccess(res, 200, "User deleted successfully");
+    handleSuccess(res, 200, "User deleted successfully.");
   } catch (error) {
     handleError(res, error.status, error.message);
   }

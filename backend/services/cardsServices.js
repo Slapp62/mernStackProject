@@ -10,11 +10,30 @@ const getAllCards = async () => {
 const createCard = async (cardData) => {
   try {
     const newCard = new Cards(cardData);
-    return await newCard.save();
+    await newCard.save();
+    const responseObject = {
+      title: newCard.title,
+      subtitle: newCard.subtitle,
+      description: newCard.description,
+      phone: newCard.phone,
+      email: newCard.email,
+      web: newCard.web,
+      image: {
+        url: newCard.image.url,
+        alt: newCard.image.alt,
+      },
+      address: {
+        country: newCard.address.country,
+        state: newCard.address.state,
+        city: newCard.address.city,
+        street: newCard.address.street,
+        houseNumber: newCard.address.houseNumber,
+        zip: newCard.address.zip,
+      }
+    };
+    return responseObject;
   } catch (error) {
-    const createError = new Error("Error creating card - " + error.message);
-    createError.status = 400;
-    throw createError;
+    throwError(400, error.message);
   }
 };
 
