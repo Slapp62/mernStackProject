@@ -17,6 +17,9 @@ export function HomePage() {
     }, [dispatch]);
     
     const allCards = useSelector((state:RootState) => state.cardSlice.cards);
+    console.log('allCards:', allCards);
+    console.log('typeof allCards:', typeof allCards);
+    console.log('Array.isArray(allCards):', Array.isArray(allCards));
     const isLoading = useSelector((state:RootState) => state.cardSlice.loading);
 
     const cards = useMemo(() => {

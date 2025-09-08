@@ -16,6 +16,9 @@ const startServer = async () => {
       if (config.get("NODE_ENV") === "development") {
         await seedDevData(dummyUsers, dummyCards);
       }
+      if (config.get("NODE_ENV") === "production") {
+        await seedDevData(dummyUsers, dummyCards);
+      }
     });
     return server; // Return server instance for potential cleanup
   } catch (error) {
