@@ -20,6 +20,7 @@ const {
 } = require("../middleware/authService.js");
 const cardValidation = require("../middleware/cardValidation.js");
 const normalizeCard = require("../utils/normalizeCard.js");
+const e = require("express");
 
 const cardRouter = express.Router();
 
@@ -29,44 +30,33 @@ cardRouter.get("/", async (_req, res) => {
     const cards = await getAllCards();
     handleSuccess(res, 200, cards, "Cards fetched successfully");
   } catch (error) {
-    handleError(res, 500, error.message);
+    handleError(res, error.status, error.message);
   }
 });
 
-// 2 - get card by id
-cardRouter.get("/:id", async (req, res) => {
-  try {
-    const cardId = req.params.id;
-    const card = await getCardById(cardId);
-    handleSuccess(res, 200, card, "Card fetched successfully");
-  } catch (error) {
-    handleError(res, 500, error.message);
-  }
-});
-
-// 3 - get cards by user id
+// 2 - get cards by user id
 cardRouter.get("/my-cards", authenticateUser, async (req, res) => {
   try {
     const userId = req.user._id;
     const userCards = await getUserCards(userId);
     handleSuccess(res, 200, userCards, "User cards fetched successfully");
   } catch (error) {
-    handleError(res, 500, error.message);
+    handleError(res, error.status, error.message);
   }
 });
 
-// 4 - get liked cards by user id
-cardRouter.get("/liked", authenticateUser, async (req, res) => {
+// 3 - get card by id
+cardRouter.get("/:id", async (req, res) => {
   try {
-    const userId = req.user._id;
-    const likedCards = await getLikedCards(userId);
-    handleSuccess(res, 200, likedCards, "Liked cards fetched successfully");
+    const cardId = req.params.id;
+    const card = await getCardById(cardId);
+    handleSuccess(res, 200, card, "Card fetched successfully");
   } catch (error) {
-    handleError(res, 500, error.message);
+    handleError(res, error.status, error.message);
   }
 });
 
-// 5 - create a new card
+// 4 - create a new card
 cardRouter.post(
   "/",
   authenticateUser,
@@ -84,11 +74,10 @@ cardRouter.post(
   },
 );
 
-// 6 - edit card by id
+// 5 - edit card by id
 cardRouter.put(
   "/:id",
   authenticateUser,
-  businessAuth,
   cardCreatorAuth,
   cardValidation,
   async (req, res) => {
@@ -98,24 +87,23 @@ cardRouter.put(
       const updatedCard = await editCardById(cardId, cardData);
       handleSuccess(res, 200, updatedCard, "Card updated successfully");
     } catch (error) {
-      handleError(res, 500, error.message);
+      handleError(res, error.status, error.message);
     }
   },
 );
 
-// 7 - delete card by id
-cardRouter.delete("/:id", authenticateUser, cardCreatorAdminAuth, async (req, res) => {
+// *Bonus - get liked cards by user id
+cardRouter.get("/liked", authenticateUser, async (req, res) => {
   try {
-    const cardId = req.params.id;
     const userId = req.user._id;
-    const deletedCard = await deleteCardById(cardId, userId);
-    handleSuccess(res, 200, deletedCard, "Card deleted successfully");
+    const likedCards = await getLikedCards(userId);
+    handleSuccess(res, 200, likedCards, "Liked cards fetched successfully");
   } catch (error) {
-    handleError(res, 500, error.message);
+    handleError(res, error.status, error.message);
   }
 });
 
-// 8 - add like to card
+// 6 - add like to card
 cardRouter.patch("/:id", authenticateUser, async (req, res) => {
   try {
     const cardId = req.params.id;
@@ -127,7 +115,18 @@ cardRouter.patch("/:id", authenticateUser, async (req, res) => {
   }
 });
 
-// 9 - Change business number
+// 7 - delete card by id
+cardRouter.delete("/:id", authenticateUser, cardCreatorAdminAuth, async (req, res) => {
+  try {
+    const cardId = req.params.id;
+    const deletedCard = await deleteCardById(cardId);
+    handleSuccess(res, 200, deletedCard, "Card deleted successfully");
+  } catch (error) {
+    handleError(res, error.status, error.message);
+  }
+});
+
+// *Bonus - Change business number
 cardRouter.patch(
   "/bizNumber/:id",
   authenticateUser,

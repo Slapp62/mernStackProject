@@ -103,9 +103,9 @@ const authenticateUser = (req, _res, next) => {
 const adminAuth = (req, _res, next) => {
   if (!req.user.isAdmin) {
     return nextError(next, 403, "Access denied. Admin access only.");
-  } else {
-    next();
-  }
+  } 
+
+  next();
 };
 
 const businessAuth = (req, _res, next) => {

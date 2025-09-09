@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken");
+const { throwError } = require("../../utils/functionHandlers");
+const e = require("express");
 
 const generateAuthToken = (user) => {
   const { _id, isAdmin, isBusiness } = user;
@@ -20,7 +22,7 @@ const verifyAuthToken = (token) => {
     const userData = jwt.verify(token, process.env.JWT_SECRET);
     return userData;
   } catch (error) {
-    throw new Error("Invalid token");
+    throwError(401, error.message);
   }
 };
 
