@@ -1,8 +1,7 @@
 const request = require("supertest");
-const app = require("../app");
+const app = require("../../app");
 
-describe("Cards API Endpoints", () => {
-  describe("GET /api/cards/", () => {
+describe("GET /api/cards/", () => {
     test("should return all cards with status 200", async () => {
       // Act: Make a GET request to your cards endpoint
       const response = await request(app).get("/api/cards/").expect(200); // This checks the HTTP status code
@@ -19,4 +18,3 @@ describe("Cards API Endpoints", () => {
       expect(firstCard).toHaveProperty("phone");
     });
   });
-});

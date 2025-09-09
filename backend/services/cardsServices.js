@@ -41,11 +41,6 @@ const getCardById = async (id) => {
 };
 
 const getUserCards = async (userId) => {
-  const user = await Users.findById(userId);
-  if (!user.isBusiness) {
-    throwError(403, "Access denied. Unauthorized user.");
-  }
-
   const userCards = await Cards.find({ user_id: userId });
   if (userCards.length === 0) {
     throwError(404, "User has no cards");
