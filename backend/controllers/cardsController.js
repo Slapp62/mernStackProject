@@ -15,8 +15,8 @@ const {
   authenticateUser,
   businessAuth,
   cardCreatorAuth,
-  userAdminAuth,
   adminAuth,
+  cardCreatorAdminAuth,
 } = require("../middleware/authService.js");
 const cardValidation = require("../middleware/cardValidation.js");
 const normalizeCard = require("../utils/normalizeCard.js");
@@ -104,7 +104,7 @@ cardRouter.put(
 );
 
 // 7 - delete card by id
-cardRouter.delete("/:id", authenticateUser, userAdminAuth, async (req, res) => {
+cardRouter.delete("/:id", authenticateUser, cardCreatorAdminAuth, async (req, res) => {
   try {
     const cardId = req.params.id;
     const userId = req.user._id;

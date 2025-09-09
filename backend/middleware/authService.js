@@ -7,6 +7,7 @@ const { verifyAuthToken } = require("../auth/providers/jwt");
 const Cards = require("../validation/mongoSchemas/cardsSchema");
 const Users = require("../validation/mongoSchemas/usersSchema");
 const { verifyPassword } = require("../utils/bcrypt");
+const c = require("config");
 
 const tokenGenerator = config.get("TOKEN_GENERATOR") || "jwt";
 
@@ -99,7 +100,7 @@ const authenticateUser = (req, _res, next) => {
   }
 };
 
-const adminAuth = (req, res, next) => {
+const adminAuth = (req, _res, next) => {
   if (!req.user.isAdmin) {
     return nextError(next, 403, "Access denied. Admin access only.");
   } else {
@@ -109,13 +110,13 @@ const adminAuth = (req, res, next) => {
 
 const businessAuth = (req, _res, next) => {
   if (!req.user.isBusiness) {
-    return nextError(next, 403, "Access denied. Business access only.");
+    nextError(next, 403, "Access denied. Business access only.");
   } else {
     next();
   }
 };
 
-const userAdminAuth = async (req, res, next) => {
+const userAdminAuth = async (req, _res, next) => {
   const requestedUserId = req.params.id;
   if (req.user._id === requestedUserId || req.user.isAdmin) {
     next();
@@ -124,15 +125,40 @@ const userAdminAuth = async (req, res, next) => {
   }
 };
 
-const cardCreatorAuth = async (req, res, next) => {
-  const cardId = req.params.id;
+const cardCreatorAuth = async (req, _res, next) => {
   try {
+    const cardId = req.params.id;
     const card = await Cards.findById(cardId);
+
+    if (!card) {
+      throwError(404, "Card not found");
+    }
+
     if (card.user_id !== req.user._id) {
       throwError(403, "Access denied. Unauthorized user.");
-    } else {
-      next();
+    } 
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+const cardCreatorAdminAuth = async (req, _res, next) => {
+  try {
+    const cardId = req.params.id;
+    const card = await Cards.findById(cardId);
+    if (!card) {
+      throwError(404, "Card not found");
+      
     }
+
+    cardUserId = card.user_id.toString();
+    if (cardUserId !== req.user._id && !req.user.isAdmin) {
+      throwError(403, "Access denied. Unauthorized user.");
+    }
+    
+    next();
   } catch (error) {
     next(error);
   }
@@ -145,5 +171,6 @@ module.exports = {
   businessAuth,
   userAdminAuth,
   cardCreatorAuth,
+  cardCreatorAdminAuth,
   lockoutCheck,
 };
