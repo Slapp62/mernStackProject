@@ -17,8 +17,7 @@ const {
   adminAuth,
   userAdminAuth,
   lockoutCheck,
-  verifyCredentials,
-  userAuth,
+  verifyCredentials
 } = require("../middleware/authService.js");
 const { generateAuthToken } = require("../auth/providers/jwt.js");
 
@@ -52,27 +51,6 @@ userRouter.post(
   },
 );
 
-// 3 - Get all users - Admin only
-userRouter.get("/", authenticateUser, adminAuth, async (_req, res) => {
-  try {
-    const users = await getAllUsers();
-    handleSuccess(res, 200, users, "Users fetched successfully.");
-  } catch (error) {
-    handleError(res, error.status || 500, error.message);
-  }
-});
-
-// 4 - Get user by ID
-userRouter.get("/:id", authenticateUser, userAdminAuth, async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const user = await getUserById(userId);
-    handleSuccess(res, 200, user, "User fetched successfully.");
-  } catch (error) {
-    handleError(res, error.status, error.message);
-  }
-});
-
 // 5 - Update user profile - User only
 userRouter.put("/edit-profile", authenticateUser, async (req, res) => {
   try {
@@ -96,10 +74,31 @@ userRouter.patch("/toggle-role", authenticateUser, async (req, res) => {
   }
 });
 
+// 3 - Get all users - Admin only
+userRouter.get("/", authenticateUser, adminAuth, async (_req, res) => {
+  try {
+    const users = await getAllUsers();
+    handleSuccess(res, 200, users, "Users fetched successfully.");
+  } catch (error) {
+    handleError(res, error.status || 500, error.message);
+  }
+});
+
+// 4 - Get user by ID
+userRouter.get("/:id", authenticateUser, userAdminAuth, async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await getUserById(userId);
+    handleSuccess(res, 200, user, "User fetched successfully.");
+  } catch (error) {
+    handleError(res, error.status, error.message);
+  }
+});
+
 // 7 - Delete user
 userRouter.delete("/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
-    const userId = req.params._id;
+    const userId = req.params.id;
     await deleteUser(userId);
     handleSuccess(res, 200, "User deleted successfully.");
   } catch (error) {

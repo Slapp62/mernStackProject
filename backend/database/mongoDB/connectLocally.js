@@ -3,7 +3,7 @@ const chalk = require("chalk");
 
 const connectLocalDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_LOCAL_URI);
+    await mongoose.connect(process.env.MONGO_LOCAL_URI || "");
     console.log(chalk.green.bold("MongoDB connected locally."));
   } catch (error) {
     console.error("MongoDB-Local connection error", error);

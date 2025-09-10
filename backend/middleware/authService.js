@@ -153,7 +153,7 @@ const cardCreatorAdminAuth = async (req, _res, next) => {
       
     }
 
-    cardUserId = card.user_id.toString();
+    const cardUserId = card.user_id.toString();
     if (cardUserId !== req.user._id && !req.user.isAdmin) {
       throwError(403, "Access denied. Unauthorized user.");
     }

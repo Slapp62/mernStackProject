@@ -45,6 +45,17 @@ cardRouter.get("/my-cards", authenticateUser, async (req, res) => {
   }
 });
 
+// *Bonus - get liked cards by user id
+cardRouter.get("/liked", authenticateUser, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const likedCards = await getLikedCards(userId);
+    handleSuccess(res, 200, likedCards, "Liked cards fetched successfully");
+  } catch (error) {
+    handleError(res, error.status, error.message);
+  }
+});
+
 // 3 - get card by id
 cardRouter.get("/:id", async (req, res) => {
   try {
@@ -91,17 +102,6 @@ cardRouter.put(
     }
   },
 );
-
-// *Bonus - get liked cards by user id
-cardRouter.get("/liked", authenticateUser, async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const likedCards = await getLikedCards(userId);
-    handleSuccess(res, 200, likedCards, "Liked cards fetched successfully");
-  } catch (error) {
-    handleError(res, error.status, error.message);
-  }
-});
 
 // 6 - add like to card
 cardRouter.patch("/:id", authenticateUser, async (req, res) => {

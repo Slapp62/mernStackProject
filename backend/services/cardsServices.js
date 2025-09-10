@@ -93,11 +93,9 @@ const toggleLike = async (cardId, userId) => {
 };
 
 const changeBizNumber = async (cardId, newNumber) => {
-  const allCards = await Cards.find({});
-  for (const card of allCards) {
-    if (card.bizNumber === Number(newNumber)) {
-      throwError(400, "Business number already in use.");
-    }
+  const isInUse = await Cards.exists({bizNumber: Number(newNumber)});
+  if (isInUse) {
+    throwError(400, "Business number already in use.");
   }
 
   const updatedCard = await Cards.findByIdAndUpdate(
