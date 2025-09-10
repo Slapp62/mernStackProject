@@ -14,6 +14,7 @@ export function CreateCard() {
     const jumpTo = useNavigate();
     const isMobile = useMediaQuery('(max-width: 700px)');
     const dispatch = useDispatch();
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
 
     const { register, handleSubmit, formState: {errors, isValid} } = useForm<TCards>({
         mode: 'all',
@@ -23,7 +24,7 @@ export function CreateCard() {
     const onSubmit = async (data:FieldValues) => {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
         axios.defaults.headers.common['x-auth-token'] = token;
-        const url = 'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards'
+        const url = `${API_BASE_URL}/api/cards`
         data.address.houseNumber = Number(data.address.houseNumber);
         data.address.zip = Number(data.address.zip);
         

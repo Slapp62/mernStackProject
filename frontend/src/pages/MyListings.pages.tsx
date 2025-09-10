@@ -17,14 +17,14 @@ export function MyCards()  {
 	const user = useSelector((state:RootState) => state.userSlice.user);
 	const [userCards, setUserCards] = useState<TCards[]>([]);
 	const jumpTo = useNavigate();
-    
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
     
 	useEffect(() => {
 	const loadUserCards = async () => {
 			try {
 				const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 				const response = await axios.get(
-						'https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/my-cards',
+						`${API_BASE_URL}/api/cards/my-cards`,
 						{headers: {'x-auth-token': token}}
 				);
 				setUserCards(response.data);

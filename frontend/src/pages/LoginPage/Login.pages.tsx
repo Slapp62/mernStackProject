@@ -53,7 +53,7 @@ export function LoginPage() {
 
       const { _id } = jwtDecode<TdecodedToken>(token);
       const userResponse = await axios.get(`${API_BASE_URL}/api/users/${_id}`)
-    
+      
       dispatch(setUser(userResponse.data))
       toast.success('Logged In!', {position: 'bottom-right'});
 

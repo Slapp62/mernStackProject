@@ -7,7 +7,8 @@ import { useDispatch } from "react-redux";
 
 const useStayLoggedIn = () => {
     const dispatch = useDispatch();
-    
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
+
     useEffect(() => {
         
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
@@ -19,7 +20,7 @@ const useStayLoggedIn = () => {
         const { _id } = jwtDecode<TdecodedToken>(token);
 
         const dispatchUser = async () => {
-            const response = await axios.get(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users/${_id}`)
+            const response = await axios.get(`${API_BASE_URL}/api/users/${_id}`)
             const userData = await response.data;
             dispatch(setUser(userData.data)); 
         }

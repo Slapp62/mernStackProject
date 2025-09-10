@@ -14,6 +14,7 @@ import { cleanedCardData } from "@/utils/getCleanedData";
 import { RootState } from "@/store/store";
 
 export function EditCard() {
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
     const {id} = useParams();
     const isMobile = useMediaQuery('(max-width: 700px)');
     const [isDisabled, setDisabled] = useState(true);
@@ -36,7 +37,7 @@ export function EditCard() {
         data.address.houseNumber = Number(data.address.houseNumber);
         data.address.zip = Number(data.address.zip);
         try {
-            const response = await axios.put(`https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${id}`, data);
+            const response = await axios.put(`${API_BASE_URL}/api/cards/${id}`, data);
             if (response.status === 200) {
                 dispatch(editCard({card : response.data as TCards}));
                 toast.success('Card Updated Successfully!', {position: `bottom-right`}); 

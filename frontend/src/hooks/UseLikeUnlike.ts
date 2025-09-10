@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 export function useLikeUnlike() {
     const dispatch = useDispatch();
-
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
     
     const toggleLike = useCallback(async (card:TCards, userID:string, isLiked:boolean) => {
         
@@ -20,7 +20,7 @@ export function useLikeUnlike() {
 
                 axios.defaults.headers.common["x-auth-token"] = token;
                 const response = await axios.patch(
-                    `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${card._id}`,
+                    `${API_BASE_URL}/api/cards/${card._id}`,
                 );
 
                 if (isLiked){ 

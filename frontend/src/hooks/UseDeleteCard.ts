@@ -8,13 +8,14 @@ import { toast } from "react-toastify";
 export function useDeleteCard() {
     const dispatch = useDispatch();
     const globalCards = useSelector((state:RootState) => state.cardSlice.cards)
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8181";
 
     const deleteCard = async (card:TCards) => {
         // update API
         try {
             const token = localStorage.getItem('token') || sessionStorage.getItem('token');
             const response = await axios.delete(
-                `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards/${card._id}`, 
+                `${API_BASE_URL}/api/cards/${card._id}`, 
                 {
                     headers: {
                         'x-auth-token': token
