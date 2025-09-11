@@ -8,7 +8,7 @@ const getAllUsers = async () => {
   if (!users || users.length === 0) {
     throwError(400, "No users found");
   }
-  const normalizedUsers = users.map(user => normalizeUserResponse(user));
+  const normalizedUsers = users.map((user) => normalizeUserResponse(user));
   return normalizedUsers;
 };
 
@@ -26,7 +26,7 @@ const registerUser = async (userData) => {
   const newUser = new Users(userData);
   const savedUser = await newUser.save();
   const normalizedUser = normalizeUserResponse(savedUser);
-  return normalizedUser; 
+  return normalizedUser;
 };
 
 const getUserById = async (userId) => {
@@ -39,7 +39,9 @@ const getUserById = async (userId) => {
 };
 
 const updateProfile = async (userId, updateData) => {
-  const updatedUser = await Users.findByIdAndUpdate(userId, updateData, { new: true });
+  const updatedUser = await Users.findByIdAndUpdate(userId, updateData, {
+    new: true,
+  });
   if (!updatedUser) {
     throwError(404, "User not found");
   }
@@ -53,7 +55,11 @@ const toggleRole = async (userId) => {
     throwError(404, "User not found");
   }
   const isBusiness = !user.isBusiness;
-  const updatedUser = await Users.findByIdAndUpdate(userId, { isBusiness }, { new: true });
+  const updatedUser = await Users.findByIdAndUpdate(
+    userId,
+    { isBusiness },
+    { new: true },
+  );
   const normalizedUser = normalizeUserResponse(updatedUser);
   return normalizedUser;
 };

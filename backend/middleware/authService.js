@@ -1,13 +1,9 @@
 const config = require("config");
-const {
-  throwError,
-  nextError,
-} = require("../utils/functionHandlers");
+const { throwError, nextError } = require("../utils/functionHandlers");
 const { verifyAuthToken } = require("../auth/providers/jwt");
 const Cards = require("../validation/mongoSchemas/cardsSchema");
 const Users = require("../validation/mongoSchemas/usersSchema");
 const { verifyPassword } = require("../utils/bcrypt");
-const c = require("config");
 
 const tokenGenerator = config.get("TOKEN_GENERATOR") || "jwt";
 
@@ -103,7 +99,7 @@ const authenticateUser = (req, _res, next) => {
 const adminAuth = (req, _res, next) => {
   if (!req.user.isAdmin) {
     return nextError(next, 403, "Access denied. Admin access only.");
-  } 
+  }
 
   next();
 };
@@ -129,14 +125,14 @@ const cardCreatorAuth = async (req, _res, next) => {
   try {
     const cardId = req.params.id;
     const card = await Cards.findById(cardId, "user_id");
-    
+
     if (!card) {
       throwError(404, "Card not found");
     }
 
     if (card.user_id.toString() !== req.user._id) {
       throwError(403, "Access denied. Unauthorized user.");
-    } 
+    }
 
     next();
   } catch (error) {
@@ -150,14 +146,13 @@ const cardCreatorAdminAuth = async (req, _res, next) => {
     const card = await Cards.findById(cardId);
     if (!card) {
       throwError(404, "Card not found");
-      
     }
 
     const cardUserId = card.user_id.toString();
     if (cardUserId !== req.user._id && !req.user.isAdmin) {
       throwError(403, "Access denied. Unauthorized user.");
     }
-    
+
     next();
   } catch (error) {
     next(error);

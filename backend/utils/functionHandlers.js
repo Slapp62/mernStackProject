@@ -19,7 +19,7 @@ const nextError = (next, status, message) => {
 
 const handleError = (res, status = 500, message = "") => {
   console.log(chalk.redBright.bold(message, status));
-  return res.status(status).json({ message: message });
+  return res.status(status).json({ message });
 };
 
 module.exports = { handleSuccess, throwError, nextError, handleError };

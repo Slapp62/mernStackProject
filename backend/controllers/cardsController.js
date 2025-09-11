@@ -20,7 +20,6 @@ const {
 } = require("../middleware/authService.js");
 const cardValidation = require("../middleware/cardValidation.js");
 const normalizeCard = require("../utils/normalizeCard.js");
-const e = require("express");
 
 const cardRouter = express.Router();
 
@@ -116,15 +115,20 @@ cardRouter.patch("/:id", authenticateUser, async (req, res) => {
 });
 
 // 7 - delete card by id
-cardRouter.delete("/:id", authenticateUser, cardCreatorAdminAuth, async (req, res) => {
-  try {
-    const cardId = req.params.id;
-    const deletedCard = await deleteCardById(cardId);
-    handleSuccess(res, 200, deletedCard, "Card deleted successfully");
-  } catch (error) {
-    handleError(res, error.status, error.message);
-  }
-});
+cardRouter.delete(
+  "/:id",
+  authenticateUser,
+  cardCreatorAdminAuth,
+  async (req, res) => {
+    try {
+      const cardId = req.params.id;
+      const deletedCard = await deleteCardById(cardId);
+      handleSuccess(res, 200, deletedCard, "Card deleted successfully");
+    } catch (error) {
+      handleError(res, error.status, error.message);
+    }
+  },
+);
 
 // *Bonus - Change business number
 cardRouter.patch(

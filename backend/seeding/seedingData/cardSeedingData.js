@@ -66,7 +66,7 @@ const dummyCards = [
       country: "Israel",
       city: "Jerusalem",
       street: "King George",
-      houseNumber: "42A",
+      houseNumber: 42,
       zip: 9426805,
     },
     likes: [],

@@ -7,7 +7,7 @@ const getAllCards = async () => {
   if (cards.length === 0) {
     throwError(404, "No cards found");
   }
-  const normalizedCards = cards.map(card => normalizeCardResponse(card));
+  const normalizedCards = cards.map((card) => normalizeCardResponse(card));
   return normalizedCards;
 };
 
@@ -33,7 +33,9 @@ const getUserCards = async (userId) => {
     throwError(404, "User has no cards");
   }
 
-  const normalizedUserCards = userCards.map(card => normalizeCardResponse(card));
+  const normalizedUserCards = userCards.map((card) =>
+    normalizeCardResponse(card),
+  );
   return normalizedUserCards;
 };
 
@@ -42,7 +44,9 @@ const getLikedCards = async (userId) => {
   if (likedCards.length === 0) {
     throwError(404, "User has no liked cards");
   }
-  const normalizedLikedCards = likedCards.map(card => normalizeCardResponse(card));
+  const normalizedLikedCards = likedCards.map((card) =>
+    normalizeCardResponse(card),
+  );
   return normalizedLikedCards;
 };
 
@@ -86,7 +90,7 @@ const toggleLike = async (cardId, userId) => {
 };
 
 const changeBizNumber = async (cardId, newNumber) => {
-  const isInUse = await Cards.exists({bizNumber: Number(newNumber)});
+  const isInUse = await Cards.exists({ bizNumber: Number(newNumber) });
   if (isInUse) {
     throwError(400, "Business number already in use.");
   }

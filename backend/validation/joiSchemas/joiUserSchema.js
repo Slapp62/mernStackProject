@@ -41,11 +41,8 @@ const joiUserSchema = joi.object({
       country: joi.string().min(2).max(256).required(),
       city: joi.string().min(2).max(256).required(),
       street: joi.string().min(2).max(256).required(),
-      houseNumber: joi
-        .alternatives()
-        .try(joi.string(), joi.number())
-        .required(),
-      zip: joi.alternatives().try(joi.string(), joi.number()).required(),
+      houseNumber: joi.number().integer().required(),
+      zip: joi.number().integer().min(1000000).max(9999999).required(),
     })
     .required(),
 

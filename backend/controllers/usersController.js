@@ -17,7 +17,7 @@ const {
   adminAuth,
   userAdminAuth,
   lockoutCheck,
-  verifyCredentials
+  verifyCredentials,
 } = require("../middleware/authService.js");
 const { generateAuthToken } = require("../auth/providers/jwt.js");
 
@@ -28,7 +28,7 @@ userRouter.post("/", profileValidation, async (req, res) => {
   try {
     const userData = req.body;
     const user = await registerUser(userData);
-    
+
     handleSuccess(res, 201, user, "User registered successfully.");
   } catch (error) {
     handleError(res, error.status, error.message);
@@ -73,9 +73,10 @@ userRouter.get("/:id", authenticateUser, userAdminAuth, async (req, res) => {
 });
 
 // 5 - Update user profile - User only
-userRouter.put("/:id", authenticateUser, async (req, res) => {
+userRouter.put("/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.params.id;
+
     const updateData = req.body;
     const updatedUser = await updateProfile(userId, updateData);
     handleSuccess(res, 200, updatedUser, "Profile updated successfully.");
@@ -85,9 +86,9 @@ userRouter.put("/:id", authenticateUser, async (req, res) => {
 });
 
 // 6 - Toggle user role - User only
-userRouter.patch("/:id", authenticateUser, async (req, res) => {
+userRouter.patch("/:id", authenticateUser, userAdminAuth, async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.params.id;
     const updatedUser = await toggleRole(userId);
     handleSuccess(res, 200, updatedUser, "Role updated successfully.");
   } catch (error) {

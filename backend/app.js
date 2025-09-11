@@ -13,9 +13,9 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:5173", 
-      "http://localhost:5174", 
-      "https://mernstackproject-client.onrender.com"
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://mernstackproject-client.onrender.com",
     ],
     credentials: true,
   }),

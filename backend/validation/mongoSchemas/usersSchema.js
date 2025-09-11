@@ -93,11 +93,11 @@ const userSchema = new Schema({
       maxLength: 256,
     },
     houseNumber: {
-      type: Schema.Types.Mixed,
+      type: Number,
       required: true,
     },
     zip: {
-      type: Schema.Types.Mixed,
+      type: Number,
       required: true,
     },
     _id: {
