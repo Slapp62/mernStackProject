@@ -53,7 +53,7 @@ export const useEditProfile = () => {
         data.address.zip = Number(data.address.zip);
         try {
             const response = await axios.put(
-                `${API_BASE_URL}/api/users/edit-profile`, data);
+                `${API_BASE_URL}/api/users/:id`, data);
 
             if (response.status === 200) {
                 const updatedUser = response.data;
@@ -81,7 +81,7 @@ export const useEditProfile = () => {
         const token  = localStorage.getItem('token') || sessionStorage.getItem('token');
         axios.defaults.headers.common['x-auth-token'] = token;
         try {
-            const response = await axios.patch(`${API_BASE_URL}/api/users/toggle-role`);
+            const response = await axios.patch(`${API_BASE_URL}/api/users/:id`);
             if (response.status === 200) {
                 const updatedUser = response.data;
                 setSubmitting(true);
@@ -96,7 +96,7 @@ export const useEditProfile = () => {
                     }
                     toast.success('Account Status Updated');
                     setSubmitting(false);
-                }, 2000);
+                }, 1000);
             }
         } catch (error : any) {
             toast.error(error.response.data.message, {position: `bottom-right`});

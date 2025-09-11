@@ -2,7 +2,6 @@ import { TCards } from "@/Types";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
 export const fetchCardsThunk = createAsyncThunk('card/fetchCards', async () => {
   const API_BASE_URL = import.meta.env.VITE_API_URL;
   
@@ -12,12 +11,14 @@ export const fetchCardsThunk = createAsyncThunk('card/fetchCards', async () => {
 
 type CardState = {
     cards: TCards[];
+    userCards: TCards[];
     loading: boolean;
     error: string | null;
     sortOption: string;
 }
 const initialState:CardState = {
     cards: [],
+    userCards: [],
     loading: false,
     error: null,
     sortOption: '',
@@ -29,7 +30,7 @@ const cardSlice = createSlice({
     reducers: {
         addCard: (state, action:PayloadAction<TCards>) => {
             if (state.cards){
-                state.cards.push(action.payload);
+              state.cards.push(action.payload);
             }
         },
         editCard: (state, action:PayloadAction<{card:TCards}>) => {
@@ -47,6 +48,13 @@ const cardSlice = createSlice({
                 state.cards = state.cards?.filter((card) => 
                     card._id !== action.payload._id)
             }
+        },
+        addUserCards: (state, action:PayloadAction<TCards[]>) => {
+          state.userCards = action.payload;
+        },
+        removeUserCard: (state, action:PayloadAction<TCards>) => {
+          state.userCards = state.userCards?.filter((card) => 
+            card._id !== action.payload._id)
         },
         addLike: (state, action:PayloadAction<{card:TCards; userID:string}>) => {
             const {card, userID} = action.payload;
@@ -101,5 +109,5 @@ const cardSlice = createSlice({
     },
 });
 
-export const {addCard, editCard, removeCard, addLike, removeLike, setSortOption} = cardSlice.actions;
+export const {addCard, addUserCards, editCard, removeCard, addLike, removeLike, setSortOption, removeUserCard} = cardSlice.actions;
 export default cardSlice.reducer;

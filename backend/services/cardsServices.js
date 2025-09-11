@@ -1,35 +1,21 @@
 const Cards = require("../validation/mongoSchemas/cardsSchema");
-const Users = require("../validation/mongoSchemas/usersSchema");
 const { throwError } = require("../utils/functionHandlers");
+const { normalizeCardResponse } = require("../utils/normalizeResponses");
 
 const getAllCards = async () => {
-  return await Cards.find({});
+  const cards = await Cards.find({});
+  if (cards.length === 0) {
+    throwError(404, "No cards found");
+  }
+  const normalizedCards = cards.map(card => normalizeCardResponse(card));
+  return normalizedCards;
 };
 
 const createCard = async (cardData) => {
   const newCard = new Cards(cardData);
-  await newCard.save();
-  const responseObject = {
-    title: newCard.title,
-    subtitle: newCard.subtitle,
-    description: newCard.description,
-    phone: newCard.phone,
-    email: newCard.email,
-    web: newCard.web,
-    image: {
-      url: newCard.image.url,
-      alt: newCard.image.alt,
-    },
-    address: {
-      country: newCard.address.country,
-      state: newCard.address.state,
-      city: newCard.address.city,
-      street: newCard.address.street,
-      houseNumber: newCard.address.houseNumber,
-      zip: newCard.address.zip,
-    }
-  };
-  return responseObject;
+  const savedCard = await newCard.save();
+  const normalizedCard = normalizeCardResponse(savedCard);
+  return normalizedCard;
 };
 
 const getCardById = async (id) => {
@@ -37,7 +23,8 @@ const getCardById = async (id) => {
   if (!card) {
     throwError(404, "Card not found");
   }
-  return card;
+  const normalizedCard = normalizeCardResponse(card);
+  return normalizedCard;
 };
 
 const getUserCards = async (userId) => {
@@ -46,7 +33,8 @@ const getUserCards = async (userId) => {
     throwError(404, "User has no cards");
   }
 
-  return userCards;
+  const normalizedUserCards = userCards.map(card => normalizeCardResponse(card));
+  return normalizedUserCards;
 };
 
 const getLikedCards = async (userId) => {
@@ -54,7 +42,8 @@ const getLikedCards = async (userId) => {
   if (likedCards.length === 0) {
     throwError(404, "User has no liked cards");
   }
-  return likedCards;
+  const normalizedLikedCards = likedCards.map(card => normalizeCardResponse(card));
+  return normalizedLikedCards;
 };
 
 const editCardById = async (cardId, updateData) => {
@@ -65,7 +54,8 @@ const editCardById = async (cardId, updateData) => {
     throwError(404, "Card not found");
   }
 
-  return updatedCard;
+  const normalizedUpdatedCard = normalizeCardResponse(updatedCard);
+  return normalizedUpdatedCard;
 };
 
 const deleteCardById = async (cardId) => {
@@ -73,7 +63,8 @@ const deleteCardById = async (cardId) => {
   if (!deletedCard) {
     throwError(404, "Card not found");
   }
-  return deletedCard;
+  const normalizedDeletedCard = normalizeCardResponse(deletedCard);
+  return normalizedDeletedCard;
 };
 
 const toggleLike = async (cardId, userId) => {
@@ -89,7 +80,9 @@ const toggleLike = async (cardId, userId) => {
   } else {
     card.likes.push(userId);
   }
-  return await card.save();
+  const savedCard = await card.save();
+  const normalizedSavedCard = normalizeCardResponse(savedCard);
+  return normalizedSavedCard;
 };
 
 const changeBizNumber = async (cardId, newNumber) => {
@@ -103,7 +96,13 @@ const changeBizNumber = async (cardId, newNumber) => {
     { bizNumber: newNumber },
     { new: true },
   );
-  return updatedCard;
+
+  if (!updatedCard) {
+    throwError(404, "Card not found");
+  }
+
+  const normalizedUpdatedCard = normalizeCardResponse(updatedCard);
+  return normalizedUpdatedCard;
 };
 
 module.exports = {

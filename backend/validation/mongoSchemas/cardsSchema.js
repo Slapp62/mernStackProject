@@ -39,12 +39,9 @@ const cardSchema = new Schema({
   image: {
     url: {
       type: String,
-      default:
-        "https://images.unsplash.com/photo-1664575602276-acd073f104c1?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     alt: {
       type: String,
-      default: "man at work",
       maxLength: 256,
     },
     _id: {

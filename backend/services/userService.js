@@ -1,13 +1,15 @@
 const { encryptPassword } = require("../utils/bcrypt");
 const { throwError } = require("../utils/functionHandlers");
 const Users = require("../validation/mongoSchemas/usersSchema");
+const { normalizeUserResponse } = require("../utils/normalizeResponses.js");
 
 const getAllUsers = async () => {
   const users = await Users.find().select("-password").lean();
   if (!users || users.length === 0) {
     throwError(400, "No users found");
   }
-  return users;
+  const normalizedUsers = users.map(user => normalizeUserResponse(user));
+  return normalizedUsers;
 };
 
 const registerUser = async (userData) => {
@@ -20,45 +22,29 @@ const registerUser = async (userData) => {
 
   const encryptedPassword = await encryptPassword(userData.password);
   userData.password = encryptedPassword;
+
   const newUser = new Users(userData);
-  await newUser.save();
-  const responseMessage = {
-    name: {
-      first: newUser.name.first,
-      middle: newUser.name.middle,
-      last: newUser.name.last,
-    },
-    address: {
-      country: newUser.address.country,
-      state: newUser.address.state,
-      city: newUser.address.city,
-      street: newUser.address.street,
-      houseNumber: newUser.address.houseNumber,
-      zip: newUser.address.zip,
-    },
-    phone: newUser.phone,
-    image: {
-      url: newUser.image.url,
-      alt: newUser.image.alt,
-    },
-    isBusiness: newUser.isBusiness,
-    email: newUser.email,
-  };
-  return responseMessage; 
+  const savedUser = await newUser.save();
+  const normalizedUser = normalizeUserResponse(savedUser);
+  return normalizedUser; 
 };
 
 const getUserById = async (userId) => {
-  const user = await Users.findById(userId)
-    .select("-password -isAdmin -__v")
-    .lean();
+  const user = await Users.findById(userId);
   if (!user) {
     throwError(404, "User not found");
   }
-  return user;
+  const normalizedUser = normalizeUserResponse(user);
+  return normalizedUser;
 };
 
 const updateProfile = async (userId, updateData) => {
-  return await Users.findByIdAndUpdate(userId, updateData, { new: true });
+  const updatedUser = await Users.findByIdAndUpdate(userId, updateData, { new: true });
+  if (!updatedUser) {
+    throwError(404, "User not found");
+  }
+  const normalizedUser = normalizeUserResponse(updatedUser);
+  return normalizedUser;
 };
 
 const toggleRole = async (userId) => {
@@ -67,11 +53,18 @@ const toggleRole = async (userId) => {
     throwError(404, "User not found");
   }
   const isBusiness = !user.isBusiness;
-  return await Users.findByIdAndUpdate(userId, { isBusiness }, { new: true });
+  const updatedUser = await Users.findByIdAndUpdate(userId, { isBusiness }, { new: true });
+  const normalizedUser = normalizeUserResponse(updatedUser);
+  return normalizedUser;
 };
 
 const deleteUser = async (userId) => {
-  return await Users.findByIdAndDelete(userId);
+  const deletedUser = await Users.findByIdAndDelete(userId);
+  if (!deletedUser) {
+    throwError(404, "User not found");
+  }
+  const normalizedUser = normalizeUserResponse(deletedUser);
+  return normalizedUser;
 };
 
 module.exports = {

@@ -19,7 +19,7 @@ const cardSchema = Joi.object({
         'any.required': 'Field is required',
     }),
     
-    phone: Joi.string().required().pattern(/^(\+972|972|0)(2|3|4|8|9|5\d)\d{7}$/).messages({
+    phone: Joi.string().required().pattern(/^0(?:5[0-9]|[2-4689])(?:-?\d{3}(?:-?\d{4}))$/).messages({
             'string.empty':'This field is required',
             'string.pattern.base':'Phone must be a valid Israeli phone number.',
     }),

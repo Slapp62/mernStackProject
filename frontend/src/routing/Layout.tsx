@@ -22,7 +22,11 @@ export function Layout() {
     const isBusiness = useSelector((state:RootState) => state.userSlice.user?.isBusiness);
     
     useEffect(() => {
-        if (location.pathname === '/' || location.pathname.startsWith('/card-details')) {
+        if (location.pathname === '/' 
+            || location.pathname.startsWith('/card-details') 
+            || location.pathname.startsWith('/my-listings')
+          ) 
+        {
             if (!fetchedRef.current) {
                 dispatch(fetchCardsThunk() as any);
                 fetchedRef.current = true;

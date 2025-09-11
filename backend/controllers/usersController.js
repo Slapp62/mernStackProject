@@ -24,7 +24,7 @@ const { generateAuthToken } = require("../auth/providers/jwt.js");
 const userRouter = express.Router();
 
 // 1 - Register a new user
-userRouter.post("/register", profileValidation, async (req, res) => {
+userRouter.post("/", profileValidation, async (req, res) => {
   try {
     const userData = req.body;
     const user = await registerUser(userData);
@@ -51,29 +51,6 @@ userRouter.post(
   },
 );
 
-// 5 - Update user profile - User only
-userRouter.put("/edit-profile", authenticateUser, async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const updateData = req.body;
-    const updatedUser = await updateProfile(userId, updateData);
-    handleSuccess(res, 200, updatedUser, "Profile updated successfully.");
-  } catch (error) {
-    handleError(res, error.status, error.message);
-  }
-});
-
-// 6 - Toggle user role - User only
-userRouter.patch("/toggle-role", authenticateUser, async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const updatedUser = await toggleRole(userId);
-    handleSuccess(res, 200, updatedUser, "Role updated successfully.");
-  } catch (error) {
-    handleError(res, error.status, error.message);
-  }
-});
-
 // 3 - Get all users - Admin only
 userRouter.get("/", authenticateUser, adminAuth, async (_req, res) => {
   try {
@@ -90,6 +67,29 @@ userRouter.get("/:id", authenticateUser, userAdminAuth, async (req, res) => {
     const userId = req.params.id;
     const user = await getUserById(userId);
     handleSuccess(res, 200, user, "User fetched successfully.");
+  } catch (error) {
+    handleError(res, error.status, error.message);
+  }
+});
+
+// 5 - Update user profile - User only
+userRouter.put("/:id", authenticateUser, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const updateData = req.body;
+    const updatedUser = await updateProfile(userId, updateData);
+    handleSuccess(res, 200, updatedUser, "Profile updated successfully.");
+  } catch (error) {
+    handleError(res, error.status, error.message);
+  }
+});
+
+// 6 - Toggle user role - User only
+userRouter.patch("/:id", authenticateUser, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const updatedUser = await toggleRole(userId);
+    handleSuccess(res, 200, updatedUser, "Role updated successfully.");
   } catch (error) {
     handleError(res, error.status, error.message);
   }

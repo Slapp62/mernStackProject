@@ -44,7 +44,7 @@ export function EditCard() {
                 setDisabled(true)         
             }
         } catch (error : any) {
-                toast.error(`Update Failed! ${error.response.data}`, {position: `bottom-right`});
+                toast.error(`Update Failed! ${error.response.data.message}`, {position: `bottom-right`});
                 
         } 
     }
@@ -103,14 +103,12 @@ export function EditCard() {
                         />
                         <TextInput 
                             label='URL' 
-                            required
                             disabled={isDisabled}
                             {...register('image.url')}
                             error= {errors.image?.url?.message}
                         />
                         <TextInput 
                             label='Alt Text'
-                            required
                             disabled={isDisabled} 
                             {...register('image.alt')}
                             error= {errors.image?.alt?.message}

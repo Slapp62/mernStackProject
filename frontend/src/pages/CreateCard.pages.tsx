@@ -34,7 +34,7 @@ export function CreateCard() {
             if (response.status === 201) {
                 dispatch(addCard(response.data));
                 toast.success('Card Submitted!', {position: "bottom-right"})
-                jumpTo('/');
+                jumpTo('/my-listings');
             }
         } catch (error:any) {
             toast.error(`Card creation failed! ${error.response.data}`, {position: "bottom-right"})
