@@ -18,8 +18,11 @@ const nextError = (next, status, message) => {
 };
 
 const handleError = (res, status = 500, message = "") => {
-  console.log(chalk.redBright.bold(message, status));
-  return res.status(status).json({ message });
+  // Convert any object to string safely
+  const errorMessage = typeof message === 'string' ? message : message?.message || 'An error occurred';
+  
+  console.log(chalk.redBright.bold(errorMessage, status));
+  return res.status(status).json({ message: errorMessage });
 };
 
 module.exports = { handleSuccess, throwError, nextError, handleError };

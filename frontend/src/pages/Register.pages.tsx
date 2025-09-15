@@ -30,14 +30,14 @@ export function RegisterForm()  {
 
         try {
             const API_BASE_URL = import.meta.env.VITE_API_URL;
-            const response = await axios.post(`${API_BASE_URL}/api/users/register`, data);
+            const response = await axios.post(`${API_BASE_URL}/api/users/`, data);
             
             if (response.status === 201) {
                 jumpTo('/login');
                 toast.success('Registered!') 
             }
         } catch (error: any) {
-            toast.error(error.response.data.message);
+            toast.error(error.response.data.message || error.message);
         }
     }
         
@@ -99,6 +99,7 @@ export function RegisterForm()  {
 
                     <Fieldset legend="Avatar">
                         <Image
+                            fallbackSrc="https://images.unsplash.com/vector-1738926319239-4121e97afc01?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                             src={imageURL} 
                             h={150}
                             w={150}
@@ -184,7 +185,6 @@ export function RegisterForm()  {
                         }}>
                         Reset Form
                     </Button>
-                    
                     <Button type="submit" mx='auto' w={200} disabled={!isValid}>Submit</Button>
 
                     <Text c="dimmed" size="sm" ta="center" mt={5}>
@@ -196,5 +196,5 @@ export function RegisterForm()  {
                 </Flex>
             </form> 
      </Flex>
-    )
+  )
 }

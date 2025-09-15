@@ -31,7 +31,7 @@ const dummyUsers = [
     },
     phone: "052-9876543",
     email: "david.levi@email.com",
-    password: "SecurePass456#",
+    password: process.env.SEEDING_BUSINESS_USER_PSWD,
     image: {
       url: "https://cdn.pixabay.com/photo/2016/11/18/19/07/happy-1836445_960_720.jpg",
       alt: "David Levi profile image",
@@ -55,7 +55,7 @@ const dummyUsers = [
     },
     phone: "054-5555555",
     email: "admin@email.com",
-    password: "AdminPass789$",
+    password: process.env.SEEDING_ADMIN_USER_PSWD,
     image: {
       url: "https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295429_960_720.png",
       alt: "Admin user profile image",

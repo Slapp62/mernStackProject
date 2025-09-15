@@ -14,8 +14,8 @@ const joiCardSchema = joi.object({
   web: joi.string().uri().optional().allow(""),
   image: joi
     .object({
-      url: joi.string().uri().optional().allow(""),
-      alt: joi.string().max(256).optional().allow(""),
+      url: joi.string().uri().optional().empty(""),
+      alt: joi.string().max(256).optional().empty(""),
     })
     .optional(),
   address: joi
@@ -25,7 +25,7 @@ const joiCardSchema = joi.object({
       city: joi.string().min(2).max(256).required(),
       street: joi.string().min(2).max(256).required(),
       houseNumber: joi.number().integer().required(),
-      zip: joi.number().integer().min(1000000).max(9999999).required(),
+      zip: joi.number().integer().required(),
     })
     .required(),
 });

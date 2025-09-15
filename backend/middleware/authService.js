@@ -79,7 +79,7 @@ const authenticateUser = (req, _res, next) => {
   if (tokenGenerator === "jwt") {
     const token = req.header("x-auth-token");
     if (!token) {
-      return nextError(next, 401, "Access denied. No token provided.");
+      return throwError(401, "Access denied. No token provided.");
     }
 
     try {

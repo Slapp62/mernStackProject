@@ -36,10 +36,10 @@ const registrationSchema = Joi.object({
         }),
 
     image: Joi.object({
-        url: Joi.string().uri().allow('').messages({
+        url: Joi.string().uri().empty('').messages({
             'string.uri':'Please enter a valid URL',
         }),
-        alt: Joi.string().min(2).max(256).allow('').messages({
+        alt: Joi.string().min(2).max(256).empty('').messages({
             'string.min':'Alt text is too short',
         }),
     }).optional(),

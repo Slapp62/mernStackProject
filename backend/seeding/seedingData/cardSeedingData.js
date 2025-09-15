@@ -1,5 +1,4 @@
 const dummyCards = [
-  // Sarah's Cards
   {
     title: "Cohen's Bakery",
     subtitle: "Fresh Bread Daily",
@@ -22,7 +21,6 @@ const dummyCards = [
     },
     likes: [],
     user_id: "68b0a60f2e7c039244a8787f",
-    // Note: bizNumber, user_id, and createdAt will be set when inserting to database
   },
   {
     title: "Sarah's Art Studio",
@@ -48,7 +46,6 @@ const dummyCards = [
     user_id: "68b0a60f2e7c039244a8787f",
   },
 
-  // David's Cards
   {
     title: "Levi Tech Solutions",
     subtitle: "IT Support & Web Development",
@@ -95,6 +92,52 @@ const dummyCards = [
     likes: [],
     user_id: "68b0a60f2e7c039244a87888",
   },
+  {
+  title: "מאפיית רפי ואורנה",
+  subtitle: "אופים בקנה מידה עכשיו",
+  description:
+    "מאפיית משפחתית המתמחה בלחמים, מאפים ועוגות מסורתיות. משתמשים במתכונים ישנים ובמרכיבים הטובים ביותר. פתוחים מ-6 בבוקר.",
+  phone: "03-5467823",
+  email: "info@rafi-orna-bakery.co.il",
+  web: "https://www.rafi-orna-bakery.co.il",
+  image: {
+    url: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=60",
+    alt: "תצוגת מאפים טריים",
+  },
+  address: {
+    state: "",
+    country: "Israel",
+    city: "רמת גן",
+    street: "ביאליק",
+    houseNumber: 47,
+    zip: 5265432,
+  },
+  likes: [],
+  user_id: "68b0a60f2e7c039244a8787f",
+},
+{
+  title: "גלריית אמנות הזוהר",
+  subtitle: "אמנות ישראלית עכשווית",
+  description:
+    "גלריה המציגה יצירות של אמנים ישראליים בולטים. מציעים גם שירותי הדרכה אמנותית וקניית יצירות מקוריות. נפתחים כל יום למעט שבת.",
+  phone: "02-6238745",
+  email: "contact@zohar-gallery.co.il",
+  web: "https://www.zohar-gallery.co.il",
+  image: {
+    url: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&auto=format&fit=crop&q=60",
+    alt: "גלריית אמנות עם ציורים",
+  },
+  address: {
+    state: "",
+    country: "Israel",
+    city: "ירושלים",
+    street: "שלומציון המלכה",
+    houseNumber: 12,
+    zip: 9426312,
+  },
+  likes: [],
+  user_id: "68b0a60f2e7c039244a8787f",
+},
 ];
 
 module.exports = dummyCards;
