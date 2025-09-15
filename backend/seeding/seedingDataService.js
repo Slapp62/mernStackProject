@@ -19,7 +19,7 @@ const seedDevData = async (users, cards) => {
     }
   }
 
-  const admin = await Users.findOne({ isAdmin: "true" });
+  const admin = await Users.findOne({ isAdmin: true });
   for (const card of cards) {
     try {
       const storedCard = await Cards.findOne({ title: card.title });

@@ -1,13 +1,11 @@
 import { Card, Image, Text, Button, Flex, ListItem, List, Box, Group, Modal, Skeleton} from '@mantine/core';
-import { IconArrowBackUp, IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Link, useLocation } from 'react-router-dom';
 import { useDeleteCard } from '@/hooks/UseDeleteCard';
 import { FavoritesButton } from './Buttons/FavoritesButton';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { useTranslateHEtoEN } from '../hooks/UseTranslateHEtoEN';
-import { BsTranslate } from 'react-icons/bs';
 import React from 'react';
 import { motion } from 'framer-motion';
 import SocialIcons from './SocialMedia';
@@ -25,9 +23,7 @@ function ListingCard({ cardID} : { cardID: string}) {
     const loggedIn = useSelector((state: RootState) => state.userSlice.isLoggedIn);
     const isMobile = useMediaQuery('(max-width: 500px)');
     const defaultImage = "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YnVzaW5lc3N8ZW58MHx8MHx8fDA%3D";
-    const {currentLang,translatedText, handleTranslate, containsHebrew, translationLoading, cardString} = 
-    useTranslateHEtoEN(card.title, card.subtitle, card.description);
-
+   
   return (
     <motion.div
         key={card._id}
@@ -55,10 +51,10 @@ function ListingCard({ cardID} : { cardID: string}) {
 
         <Card.Section px={15}>
             <Box p={5}>
-                <Text truncate my="xs" fw={500}>{translatedText ? translatedText[0] : card.title} </Text>
-                <Text truncate >{translatedText ? translatedText[1] : card.subtitle}</Text>
+                <Text truncate my="xs" fw={500}>{card.title} </Text>
+                <Text truncate >{card.subtitle}</Text>
                 <hr/>
-                <Text truncate >{translatedText ? translatedText[2] : card.description} </Text>
+                <Text truncate >{card.description} </Text>
             
                 <List>
                     <ListItem>{card.phone}</ListItem>
@@ -70,22 +66,9 @@ function ListingCard({ cardID} : { cardID: string}) {
 
             <Flex mx="auto"  my={10} gap={5} direction='column'>
                 <Group justify='center'>
-                    <Button  h={40} style={{flex: 1}} fullWidth={!containsHebrew} variant='filled' fz={12} component={Link} to={`/card-details/${card._id}`}>
+                    <Button  h={40} style={{flex: 1}} variant='filled' fz={12} component={Link} to={`/card-details/${card._id}`}>
                         <Text fw='bold'>More Info</Text>
                     </Button>
-
-                    {containsHebrew &&    
-                        <Button 
-                            h={40}
-                            style={{flex: 1}}
-                            loading={translationLoading} 
-                            leftSection={currentLang === 'he' ? <BsTranslate/> : <IconArrowBackUp/>} 
-                            variant='outline' fz={12} 
-                            onClick={() => handleTranslate(cardString)}
-                            >
-                            <Text fw='bold'>{currentLang === 'he' ? 'Translate' : "Original"}</Text>
-                        </Button>}
-
                 </Group>
                 
 

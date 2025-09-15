@@ -1,11 +1,9 @@
-import { Card, Text, Image, List, ListItem, Flex, Title, Container, Button, Group} from "@mantine/core";
+import { Card, Text, Image, List, ListItem, Flex, Title, Container, Group} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useParams } from "react-router-dom"
 import { FavoritesButton } from "@/components/Buttons/FavoritesButton";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import useTranslateHEtoEN from "@/hooks/UseTranslateHEtoEN";
-import { BsTranslate } from "react-icons/bs";
 import SocialIcons from "@/components/SocialMedia";
 
 export function CardDetails() {
@@ -14,10 +12,6 @@ export function CardDetails() {
     const user = useSelector((state:RootState) => state.userSlice.user);
     const allCards = useSelector((state:RootState) => state.cardSlice.cards);
     const card = allCards.find((card) => card._id === id);
-
-    const {currentLang, translatedText, handleTranslate, containsHebrew, translationLoading, cardString} = 
-        useTranslateHEtoEN(card?.title, card?.subtitle, card?.description);
-    
     
     return ( 
         <Container style={{width: isMobile ? "100%" : "40%"}}>
@@ -38,17 +32,10 @@ export function CardDetails() {
 
                 <Card.Section p={15} >
                     <Flex direction='column' gap={10}>
-                        <Text size="xl" fw={500}><strong>Title:</strong> {translatedText ? translatedText[0] : card?.title}</Text>
-                        <Text size='md'><strong>Subtitle:</strong> {translatedText ? translatedText[1] : card?.subtitle}</Text>
-                        <Text size="md" w='95%'><strong>Description:</strong> {translatedText ? translatedText[2] : card?.description} </Text>
+                        <Text size="xl" fw={500}><strong>Title:</strong> {card?.title}</Text>
+                        <Text size='md'><strong>Subtitle:</strong> {card?.subtitle}</Text>
+                        <Text size="md" w='95%'><strong>Description:</strong> {card?.description} </Text>
                         {card?.createdAt && <Text size="sm" mt={5}><strong>Posted: </strong>{new Date(card?.createdAt).toLocaleDateString()}</Text>}
-                    
-                    
-                    {containsHebrew &&    
-                    <Button loading={translationLoading} rightSection={<BsTranslate/>} variant='outline' fz={12} 
-                        onClick={() => handleTranslate(cardString)}>
-                        <Text fw='bold'>{currentLang === 'he' ? 'Translate' : 'Show Original'}</Text>
-                    </Button>}
                     </Flex>
 
                     <hr/>
