@@ -5,7 +5,7 @@ const { nextError } = require("../utils/functionHandlers");
 const profileValidation = (req, res, next) => {
   const { error } = joiUserSchema.validate(req.body, { abortEarly: false });
   if (error) {
-    nextError(next, res, 400, error.details[0].message);
+    return nextError(next, 400, error.details[0].message);
   }
   next();
 };
@@ -13,7 +13,7 @@ const profileValidation = (req, res, next) => {
 const loginValidation = (req, res, next) => {
   const { error } = joiLoginSchema.validate(req.body, { abortEarly: false });
   if (error) {
-    nextError(next, res, 400, error.details[0].message);
+    return nextError(next, 400, error.details[0].message);
   }
   next();
 };
