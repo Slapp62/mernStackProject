@@ -16,7 +16,7 @@ const joiUserSchema = joi.object({
     )
     .required(),
 
-  email: joi.string().email().required(),
+  email: joi.string().email({ tlds: { allow: false } }).required(),
   password: joi
     .string()
     .required()

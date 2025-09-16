@@ -20,7 +20,7 @@ const registrationSchema = Joi.object({
         'string.pattern.base':'Phone must be a valid Israeli phone number.',
     }),
 
-    email: Joi.string().email().required().messages({
+    email: Joi.string().email({ tlds: { allow: false } }).required().messages({
         'string.email':'Please enter a valid email',
         'string.empty':'Emails is required',
         'any.required': 'Email is required',

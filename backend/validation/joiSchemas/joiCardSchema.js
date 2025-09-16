@@ -10,7 +10,7 @@ const joiCardSchema = joi.object({
       /^(\+972[-\s]?|972[-\s]?|0)((2|3|4|8|9)[-\s]?\d{7}|5[0-9][-\s]?\d{7})$/,
     )
     .required(),
-  email: joi.string().email().required(),
+  email: joi.string().email({ tlds: { allow: false } }).required(),
   web: joi.string().uri().optional().allow(""),
   image: joi
     .object({

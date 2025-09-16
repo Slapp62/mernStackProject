@@ -1,7 +1,7 @@
 const joi = require("joi");
 
 const joiLoginSchema = joi.object({
-  email: joi.string().email().required(),
+  email: joi.string().email({ tlds: { allow: false } }).required(),
   password: joi
     .string()
     .required()
